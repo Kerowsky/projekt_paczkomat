@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS Paczkomat
 
 CREATE TABLE IF NOT EXISTS Uzytkownicy(
     id_uzytkownika INT,
+    haslo VARCHAR(255),
     rola ENUM('ADMIN','KURIER','KLIENT')
 );
 
