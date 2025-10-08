@@ -17,12 +17,11 @@ CREATE TABLE IF NOT EXISTS Paczkomat
     id_skrytki    INT,
     rozmiar       ENUM ('S','M','L'),
     status        ENUM ('WOLNA','ZAJĘTA') DEFAULT 'WOLNA',
-    
 );
 
 CREATE TABLE IF NOT EXISTS Uzytkownicy(
-    id_klienta INT,
-    id_kuriera INT,
+    id_uzytkownika INT,
     rola ENUM('ADMIN','KURIER','KLIENT')
 );
+
 
