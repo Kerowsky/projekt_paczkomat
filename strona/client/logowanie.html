@@ -2,12 +2,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Moja pierwsza strona</title>
+    <title>Logowanie</title>
 </head>
 <body>
-    <h1>Zero 0 zero 0 zero 0</h1>
-    <p>RB.</p>
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Kliknij mnie!</a>
-
+    <center>
+        <h1>Zaloguj się</h1>
+        <form action="login.php" method="post">
+            <p>
+                <input type="text" name="username" placeholder="Nazwa użytkownika" required>
+            </p>
+            <p>
+                <input type="password" name="password" placeholder="Hasło" required>
+            </p>
+            <p>
+                <input type="submit" value="Zaloguj">
+            </p>
+        </form>
+    </center>
 </body>
 </html>
