@@ -5,6 +5,9 @@
 #define LEDINDICATOR_PIN 13
 #define DHTPIN 11
 #define DHTTYPE DHT11
+#define SMALL_Locker_PIN 3
+#define MEDIUM_Locker_PIN 4
+#define BIG_Locker_PIN 5
 
 DHT dht(DHTPIN, DHTTYPE);
 
