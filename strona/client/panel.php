@@ -26,19 +26,20 @@ if (@$conn->connect_error) {
             JAKIESLOGO
         </a>
         <h3 id="zegar">21:15:00</h3>
-        <h3>WYLOGUJ</h3>
+        <h3><?php echo "<a href='logout.php'>Wyloguj</a>";?></h3>
     </div>
 
 </header>
 
 <h1>Witaj <?php echo $_SESSION['imie'];?> !</h1>
 <div id="paczki">
-    <table>
+    <table class="client-table">
         <tr>
             <th>ID Paczki</th>
             <th>ID Skrytki</th>
             <th>Status przesyłki</th>
             <th>Nadawca</th>
+            <th>Akcja</th>
         </tr>
     <?php
     $sql = "select * from paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
@@ -46,7 +47,7 @@ if (@$conn->connect_error) {
     if($result->num_rows > 0){
         while ($row = $result->fetch_assoc()){
             echo "<tr><td>".$row["id_paczki"]."</td><td>".$row['id_skrytki']."</td><td>". $row['status']. "</td>
-               <td>". $row['nadawca']. "</td><td><a href='http://192.168.162.60:25565/open?box=1'>Otworz skrytke</></td></tr>";
+               <td>". $row['nadawca']. "</td><td><button disabled href='http://192.168.162.60:25565/open?box=1'>Otworz skrytke</button></td></tr>";
         }
 
     }
@@ -56,7 +57,6 @@ if (@$conn->connect_error) {
     ?>
     </table>
 </div>
-<?php echo "<a href='logout.php'>Wyloguj</a>";?>
 <script>
     function startTime() {
         const today = new Date();
