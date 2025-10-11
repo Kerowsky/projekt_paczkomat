@@ -19,6 +19,7 @@ if ($result = @$conn->query($sql)) {
         $user = $row["login"];
         $_SESSION['zalogowany'] = true;
         $_SESSION['imie'] = $row['imie'];
+        $_SESSION['id_uzytkownika'] = $row['id_uzytkownika'];
 
         $result->free();
         header("Location:panel.php");

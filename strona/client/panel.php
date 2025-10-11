@@ -5,6 +5,13 @@ if (!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany'] !== true) {
     header("Location: index.php");
     exit;
 }
+
+require_once "config.php";
+$conn = @new mysqli($servername, $username, $password, $dbname);
+if (@$conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 ?>
 
 <html lang="pl">
@@ -13,12 +20,44 @@ if (!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany'] !== true) {
     <link rel="stylesheet" href="style/panel.css">
 </head>
 <body>
+<header class="mainHeader" role="banner">
+    <div class="content">
+        <a class="mainLogo">
+            JAKIESLOGO
+        </a>
+        <h3>21:15:00</h3>
+        <h3>WYLOGUJ</h3>
+    </div>
+
+</header>
+
 <h1>Witaj <?php echo $_SESSION['imie'];?> !</h1>
 <a href="http://192.168.162.60:25565/open?box=1">Otworz skrytke</a>
 <div id="paczki">
-    <div class="paczka" id="paczka1">sratytaty</div>
+    <table>
+        <tr>
+            <th>ID Paczki</th>
+            <th>ID Skrytki</th>
+            <th>Status przesyłki</th>
+            <th>Nadawca</th>
+        </tr>
+    <?php
+    $sql = "select * from paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
+    $result = @$conn->query($sql);
+    if($result->num_rows > 0){
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td>".$row["id_paczki"]."</td><td>".$row['id_skrytki']."</td><td>". $row['status']. "</td><td>". $row['nadawca']. "</td></tr>";
+        }
+    }
+    else{
+        echo "Nie masz paczek na koncie";
+    }
+    ?>
+    </table>
 </div>
 <?php echo "<a href='logout.php'>Wyloguj</a>";?>
 </body>
 </html>
 
+
+<?php $conn->close()?>
