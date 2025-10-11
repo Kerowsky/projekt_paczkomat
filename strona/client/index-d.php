@@ -13,7 +13,8 @@
         while($row = $result->fetch_assoc()) {
             echo "id: " . $row["id_paczki"]. " ". $row["id_klienta"]. " " . $row["id_kuriera"]. " " . $row["id_skrytki"]. " " . $row["status"].  " </br>";
         }
-    } else {
+    }
+    else {
         echo "0 results";
     }
     ?>

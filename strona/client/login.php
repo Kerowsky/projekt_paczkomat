@@ -1,8 +1,9 @@
 <?php
+session_start();
 require_once "config.php";
 // login.php
 $conn = @new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
+if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
@@ -11,24 +12,26 @@ $haslo = isset($_POST['password']) ? $_POST['password'] : '';
 
 $sql = "select * from Uzytkownicy where login='$login' and haslo='$haslo' ";
 
-if ($result = $conn->query($sql)) {
-    $_SESSION['zalogowany'] = true;
-    echo "✅ Zalogowano poprawnie!";
-    echo "<br><a href='panel.php'>Przejdź do panelu</a>";
-} else {
-    echo "❌ Błędny login lub hasło.";
-    echo "<br><a href='login.html'>Spróbuj ponownie</a>";
+if ($result = @$conn->query($sql)) {
+    $user = $result->num_rows;
+    if($user > 0){
+        $row = $result->fetch_assoc();
+        $user = $row["login"];
+        $_SESSION['zalogowany'] = true;
+        $_SESSION['imie'] = $row['imie'];
+
+        $result->free();
+        header("Location:panel.php");
+    }
+    else {
+        echo "❌ Błędny login lub hasło.";
+        echo "<br><a href='index.php'>Spróbuj ponownie</a>";
+    }
+
 }
 ?>
 <?php
-$sql = "select * from paczki";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["id_paczki"]. " ". $row["id_klienta"]. " " . $row["id_kuriera"]. " " . $row["id_skrytki"]. " " . $row["status"].  " </br>";
-    }
-} else {
-    echo "0 results";
-}
+
+
 $conn->close();
 ?>
