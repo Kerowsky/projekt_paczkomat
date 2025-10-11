@@ -19,20 +19,19 @@ if (@$conn->connect_error) {
     <title>Inteligentny paczkomat</title>
     <link rel="stylesheet" href="style/panel.css">
 </head>
-<body>
+<body onload="startTime()">
 <header class="mainHeader" role="banner">
     <div class="content">
         <a class="mainLogo">
             JAKIESLOGO
         </a>
-        <h3>21:15:00</h3>
+        <h3 id="zegar">21:15:00</h3>
         <h3>WYLOGUJ</h3>
     </div>
 
 </header>
 
 <h1>Witaj <?php echo $_SESSION['imie'];?> !</h1>
-<a href="http://192.168.162.60:25565/open?box=1">Otworz skrytke</a>
 <div id="paczki">
     <table>
         <tr>
@@ -45,9 +44,11 @@ if (@$conn->connect_error) {
     $sql = "select * from paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
     $result = @$conn->query($sql);
     if($result->num_rows > 0){
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["id_paczki"]."</td><td>".$row['id_skrytki']."</td><td>". $row['status']. "</td><td>". $row['nadawca']. "</td></tr>";
+        while ($row = $result->fetch_assoc()){
+            echo "<tr><td>".$row["id_paczki"]."</td><td>".$row['id_skrytki']."</td><td>". $row['status']. "</td>
+               <td>". $row['nadawca']. "</td><td><a href='http://192.168.162.60:25565/open?box=1'>Otworz skrytke</></td></tr>";
         }
+
     }
     else{
         echo "Nie masz paczek na koncie";
@@ -56,6 +57,23 @@ if (@$conn->connect_error) {
     </table>
 </div>
 <?php echo "<a href='logout.php'>Wyloguj</a>";?>
+<script>
+    function startTime() {
+        const today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('zegar').innerHTML =  h + ":" + m + ":" + s;
+        setTimeout(startTime, 1000);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {i = "0" + i};
+        return i;
+    }
+</script>
 </body>
 </html>
 
