@@ -7,18 +7,19 @@
 </head>
 <body class="d-flex align-items-center py-4 bg-dark">
 <main class="form-signin w-100 m-auto">
-    <form class="login" style="display: ">
+    <form id="loginForm" method="post" action="login.php" class="login">
         <h1 class="h3 mb-3 fw-normal text-white">Please log in</h1>]
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required autocomplete="off">
         </div>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
         </div>
         <button class="btn bg-warning mb-3 w-100" type="submit">Log in</button>
-        <button class="btn bg-info w-100 mb-3" type="text">Sign up</button>
+
     </form>
-    <form class="register" style="display: none">
+    <button id="buttonLoginForm" class="loginForm btn bg-info w-100 mb-3" type="text" onclick="startRegister()">Sign up</button>
+    <form id="registerForm" method="post" action="register.php" class="register" style="display: none">
         <h1 class="h3 mb-3 fw-normal text-white">Registration</h1>]
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Username" aria-label="Username">
@@ -42,11 +43,12 @@
     </form>
 
 </main>
+<script src="scripts/register.js" defer></script>
 <!-- JavaScript Bootstrap (wymaga Popper) -->
 <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 
 </body>
 </html>
