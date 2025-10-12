@@ -19,6 +19,7 @@ body{
   width:400px;
   text-align:center;
   box-sizing:border-box;
+  position:relative;
 }
 
 /* Pola */
