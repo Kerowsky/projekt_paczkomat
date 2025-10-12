@@ -26,6 +26,7 @@ if ($result = @$conn->query($sql)) {
         $sqlin = "INSERT INTO Uzytkownicy (login, haslo, imie, nazwisko, rola) VALUES ('$login', '$password', '$name', '$surname', 'KLIENT')";
         if ($conn->query($sqlin) === TRUE) {
             echo "New record created successfully";
+            header('Location: index.php');
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }

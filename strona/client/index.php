@@ -24,9 +24,9 @@
                 <input type="button" value="Sign in" onclick="startRegister()">
             </p>
         </form>
-        <form action="register.php" method="post" id="registerForm" style="display:;">
+        <form action="register.php" method="post" id="registerForm" style="display: none;">
             <p>
-                <input type="button" name="close" value="X">
+                <input type="button" name="close" value="X" onclick="hideRegister()">
             </p>
             <p>
                 <input type="text" name="nameReg" placeholder ="Name" required>
@@ -48,5 +48,6 @@
             </p>
         </form>
     </div>
+    <script src="scripts/register.js" defer></script>
 </body>
 </html>
