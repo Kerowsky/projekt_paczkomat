@@ -1,0 +1,8 @@
+.main-box{
+    height: 80vh;
+    width: 100%;
+}
+.form-signin{
+    max-width: 330px;
+    padding: 1rem;
+}
