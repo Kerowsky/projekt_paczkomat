@@ -3,6 +3,8 @@ CREATE DATABASE InteligentnaSkrytka;
 USE InteligentnaSkrytka;
 
 CREATE TABLE IF NOT EXISTS Paczkomat (
+    miejscowosc VARCHAR(255) NOT NULL,
+    kod_pocztowy VARCHAR(10) NOT NULL, 
     id_skrytki INT PRIMARY KEY NOT NULL,
     rozmiar ENUM('S','M','L') NOT NULL,
     status ENUM('WOLNA','ZAJETA') DEFAULT 'WOLNA',
@@ -16,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Uzytkownicy(
     haslo VARCHAR(255) NOT NULL,
     imie VARCHAR(255) NOT NULL,
     nazwisko VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     rola ENUM('ADMIN','KURIER','KLIENT') DEFAULT 'KLIENT'
 );
 
@@ -33,15 +36,18 @@ CREATE TABLE IF NOT EXISTS Paczki(
 ##              Przykładowi użytkownicy     ##
 INSERT INTO Uzytkownicy (login, haslo, imie, nazwisko, rola)
 VALUES
-    ('admin', '1234', 'Jan', 'Nowak', 'ADMIN'),
-    ('kurier_jan', '1234', 'Jan', 'Kowalski', 'KURIER'),
-    ('kurier_anna', '1234', 'Anna', 'Wiśniewska', 'KURIER'),
-    ('klient_marek', '1234', 'Marek', 'Zieliński', 'KLIENT'),
-    ('klient_ewa', '1234', 'Ewa', 'Kamińska', 'KLIENT'),
-    ('klient_piotr', '1234', 'Piotr', 'Lewandowski', 'KLIENT');
+    ('admin', '1234', 'Jan', 'Nowak','admin@firma.pl', 'ADMIN'),
+    ('kurier_jan', '1234', 'Jan', 'Kowalski','kurier.jan@onet.pl', 'KURIER'),
+    ('kurier_anna', '1234', 'Anna', 'Wiśniewska','kurier.anna@onet.pl', 'KURIER'),
+    ('klient_marek', '1234', 'Marek', 'Zieliński','marek.zielinski@gmail.pl', 'KLIENT'),
+    ('klient_ewa', '1234', 'Ewa', 'Kamińska','ewa.kaminska@gmail.pl', 'KLIENT'),
+    ('klient_piotr', '1234', 'Piotr', 'Lewandowski','piotr.lewandowski@gmail.pl', 'KLIENT');
 
 INSERT INTO Paczkomat (id_skrytki, rozmiar, status)
 VALUES
+    ('47-400');
+    ('Racibórz');
+    ('Pszczyńska 4/5');
     (1, 'L', 'WOLNA'),
     (2, 'M', 'WOLNA'),
     (3, 'M', 'ZAJETA');
@@ -51,4 +57,5 @@ VALUES
     (4,3,'W_PACZKOMACIE', 'CCC'),
     (5, NULL, 'NADANA', 'MODIVO SP. ZOO'),
     (5, NULL, 'NADANA', 'Botland')
+
 
