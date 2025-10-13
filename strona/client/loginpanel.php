@@ -16,7 +16,6 @@
             <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
         </div>
         <button class="btn bg-warning mb-3 w-100" type="submit">Log in</button>
-tt
     </form>
     <button id="buttonLoginForm" class="loginForm btn bg-info w-100 mb-3" type="text" onclick="startRegister()">Sign up</button>
     <form id="registerForm" method="post" action="register.php" class="register" style="display: none">
