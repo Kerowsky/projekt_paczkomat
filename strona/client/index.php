@@ -17,7 +17,7 @@
                     <a href="#" class="nav-link px-2 text-white">About us</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link px-2 text-white">Find your NextBox</a>
+                    <a href="map.php" class="nav-link px-2 text-white">Find your NextBox</a>
                 </li>
                 <li>
                     <a href="#" class="nav-link px-2 text-white">Contact</a>
@@ -39,9 +39,9 @@
             <b>NextBox</b> is not just a locker - its the next step in smart delivery.
         </p>
         <p class="lead w-100 d-flex justify-content-center">
-            <button class="btn white bg-warning">
+            <a href="map.php" class="btn white bg-warning">
                 Find your NextBox
-            </button>
+            </a>
         </p>
     </div>
 </main>
