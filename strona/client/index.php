@@ -37,7 +37,7 @@
             Send, receive, and manage your packages anytime, anywhere - with just a few taps.
             Innovative. Reliable. Smart.
             <b>NextBox</b> is not just a locker - its the next step in smart delivery.
-        </p>
+        </p>s
         <p class="lead w-100 d-flex justify-content-center">
             <a href="map.php" class="btn white bg-warning">
                 Find your NextBox
