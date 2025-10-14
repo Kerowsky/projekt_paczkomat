@@ -18,45 +18,45 @@ if (@$conn->connect_error) {
 <head>
     <title>Inteligentny paczkomat</title>
     <link rel="stylesheet" href="style/panel.css">
+    <title>NextBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body onload="startTime()">
-<header class="mainHeader" role="banner">
-    <div class="content">
-        <a class="mainLogo">
-            JAKIESLOGO
-        </a>
-        <h3 id="zegar">21:15:00</h3>
-        <h3><?php echo "<a href='logout.php'>Wyloguj</a>";?></h3>
+<?php
+include 'header.php';
+?>
+
+<h1>Good morning <?php echo $_SESSION['imie'];?> ! ☕</h1>
+<main class="d-flex justify-content-center align-items-center mx-auto">
+<div class="row w-50 main-box align-items-center">
+    <div class="col-md-3 paczka bg-black m-1 shadow-sm bg-body-tertiary rounded">
+        <h2>NAZWA PACKING</h2>
+        <h4>STATUS PACZKI</h4>
+        <button class="btn btn-warning">Collect</button>
+    </div>
+    <div class="col-md-3 paczka bg-black m-1 shadow-smbg-body-tertiary">
+        <h2>NAZWA PACKING</h2>
+        <h4>STATUS PACZKI</h4>
+        <button class="btn btn-warning">Collect</button>
+    </div>
+    <div class="col-md-3 paczka bg-black  m-1shadow-sm  bg-body-tertiary">
+        <h2>NAZWA PACKING</h2>
+        <h4>STATUS PACZKI</h4>
+        <button class="btn btn-warning">Collect</button>
+    </div>
+    <div class="col-md-3 paczka bg-black  m-1shadow-sm bg-body-tertiary">
+        <h2>NAZWA PACKING</h2>
+        <h4>STATUS PACZKI</h4>
+        <button class="btn btn-warning">Collect</button>
+    </div>
+    <div class="col-md-3 paczka bg-black  m-1 shadow-sm bg-body-tertiary">
+        <h2>NAZWA PACKING</h2>
+        <h4>STATUS PACZKI</h4>
+        <button class="btn btn-warning">Collect</button>
     </div>
 
-</header>
-
-<h1>Witaj <?php echo $_SESSION['imie'];?> !</h1>
-<div id="paczki">
-    <table class="client-table">
-        <tr>
-            <th>ID Paczki</th>
-            <th>ID Skrytki</th>
-            <th>Status przesyłki</th>
-            <th>Nadawca</th>
-            <th>Akcja</th>
-        </tr>
-    <?php
-    $sql = "select * from paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
-    $result = @$conn->query($sql);
-    if($result->num_rows > 0){
-        while ($row = $result->fetch_assoc()){
-            echo "<tr><td>".$row["id_paczki"]."</td><td>".$row['id_skrytki']."</td><td>". $row['status']. "</td>
-               <td>". $row['nadawca']. "</td><td><button disabled href='http://192.168.162.60:25565/open?box=1'>Otworz skrytke</button></td></tr>";
-        }
-
-    }
-    else{
-        echo "Nie masz paczek na koncie";
-    }
-    ?>
-    </table>
 </div>
+</main>
 <script>
     function startTime() {
         const today = new Date();
@@ -74,6 +74,10 @@ if (@$conn->connect_error) {
         return i;
     }
 </script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>
 
