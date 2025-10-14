@@ -21,19 +21,19 @@
     <form id="registerForm" method="post" action="register.php" class="register" style="display: none">
         <h1 class="h3 mb-3 fw-normal text-white">Registration</h1>]
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+            <input type="text" class="form-control" name="usernameReg" placeholder="Username" aria-label="Username">
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Name" aria-label="Name">
+            <input type="text" class="form-control" name="nameReg" placeholder="Name" aria-label="Name">
         </div>
         <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" aria-label="Email">
+            <input type="email" class="form-control" name="emailReg" placeholder="Email" aria-label="Email">
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Surname" aria-label="Surname">
+            <input type="text" class="form-control" name="surnameReg" placeholder="Surname" aria-label="Surname">
         </div>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Password" aria-label="Password">
+            <input type="password" class="form-control" name="passwordReg" placeholder="Password" aria-label="Password">
         </div>
         <div class="input-group mb-3">
             <input type="password" class="form-control" placeholder="Repeat password" aria-label="Password">

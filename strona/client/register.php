@@ -22,6 +22,7 @@ if ($result = @$conn->query($sql)) {
         $login = $_POST['usernameReg'];
         $password = $_POST['passwordReg'];
         $name = $_POST['nameReg'];
+        $email = $_POST['emailReg'];
         $surname = $_POST['surnameReg'];
         $sqlin = "INSERT INTO Uzytkownicy (login, haslo, imie, nazwisko, rola) VALUES ('$login', '$password', '$name', '$surname', 'KLIENT')";
         if ($conn->query($sqlin) === TRUE) {
