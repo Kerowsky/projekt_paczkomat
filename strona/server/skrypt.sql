@@ -50,5 +50,23 @@ INSERT INTO Paczki (id_uzytkownika, id_skrytki, status, nadawca)
 VALUES
     (4,3,'W_PACZKOMACIE', 'CCC'),
     (5, NULL, 'NADANA', 'MODIVO SP. ZOO'),
-    (5, NULL, 'NADANA', 'Botland')
+    (5, NULL, 'NADANA', 'Botland');
 
+
+##          ZAPYTANIA DO PANELÓW      ##
+UPDATE uzytkownicy
+SET uzytkownicy.rola = 'KLIENT'
+WHERE uzytkownicy.id_uzytkownika = 2;
+
+## WSTAWIANIE PACZKI (Opcje kuriera)
+
+SELECT paczkomat.id_skrytki, paczkomat.status
+FROM paczkomat;
+
+UPDATE paczkomat
+SET paczkomat.status = 'WOLNA'
+WHERE paczkomat.id_skrytki = 1;
+
+UPDATE paczki
+SET paczki.status = 'NADANA'
+WHERE id_paczki = 2;
