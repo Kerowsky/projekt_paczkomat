@@ -20,6 +20,7 @@ if ($result = @$conn->query($sql)) {
         $_SESSION['zalogowany'] = true;
         $_SESSION['imie'] = $row['imie'];
         $_SESSION['id_uzytkownika'] = $row['id_uzytkownika'];
+        $_SESSION['rola'] = $row['rola'];
 
         $result->free();
         header("Location:panel.php");

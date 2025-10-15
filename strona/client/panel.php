@@ -22,7 +22,7 @@ if (@$conn->connect_error) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body class="bg-dark" onload="startTime()">
-<header class="p-3 mb-3 border-bottom text-bg-dark">
+<header class="p-3 mb-3 text-bg-dark">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-evenly mb-md-0">
@@ -39,6 +39,15 @@ if (@$conn->connect_error) {
                     <a href="contact.php" class="nav-link px-2 text-white">Contact</a>
                 </li>
             </ul>
+            <?php
+            if($_SESSION['rola'] == 'KURIER'){
+                echo "
+                 <div class='text-end'>
+                <a class='btn btn-warning me-1' href='delivery.php'>Delivery panel</a>
+                </div>
+            ";
+            }
+            ?>
             <div class="text-end">
                 <a class="btn btn-warning" href="logout.php">Log out</a>
             </div>
@@ -69,7 +78,7 @@ if (@$conn->connect_error) {
                 <li class='fw-bold'>Time left:</li>
                 <li>-- hours</li>
             </ul>
-            <button type='button' class='w-100 btn btn-lg btn-outline-warning' href='http://192.168.162.60:25565/open?box=1'>Collect</button>
+            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='fetch(`http://192.168.162.93:25565/open`)'>Collect</button>
         </div>
         </div>
     </div>
