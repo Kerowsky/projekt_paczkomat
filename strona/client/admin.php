@@ -66,39 +66,61 @@ if (@$conn->connect_error) {
         <table class="table table-striped table-sm table-dark">
             <thead>
             <tr class="bg-dark">
-                <th scope="col">NUMER PACZKI</th>
-                <th scope="col">DO</th>
-                <th scope="col">OD</th>
-                <th scope="col">NR SKRYTKI</th>
+                <th scope="col">TRACKING ID</th>
+                <th scope="col">TO</th>
+                <th scope="col">FROM</th>
+                <th scope="col">LOCKER</th>
+                <th scope="col">DATE</th>
                 <th scope="col">STATUS</th>
-                <th scope="col">Akcje</th>
+                <th scope="col">ACTIONS</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1,001</td>
-                <td>random</td>
-                <td>data</td>
-                <td>placeholder</td>
-                <td><span class="badge rounded-pill text-bg-secondary">W PACZKOMACIE</span></td>
-                <td>BUTTON</td>
-            </tr>
-            <tr>
-                <td>1,002</td>
-                <td>placeholder</td>
-                <td>irrelevant</td>
-                <td>visual</td>
-                <td><span class="badge rounded-pill text-bg-success">ODEBRANA</span></td>
-                <td>BUTTON</td>
-            </tr>
-            <tr>
-                <td>1,003</td>
-                <td>data</td>
-                <td>rich</td>
-                <td>dashboard</td>
-                <td><span class="badge rounded-pill text-bg-light">NADANA</span></td>
-                <td>BUTTON</td>
-            </tr>
+            <?php
+            $sql = "SELECT id_paczki, uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
+concat(uzytkownicy.imie,' ', uzytkownicy.nazwisko) AS 'imie_nazwisko',
+id_skrytki, status, nadawca, data_nadania, data_odebrania
+FROM paczki JOIN uzytkownicy
+ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
+order by id_uzytkownika asc";
+            $result = @$conn->query($sql);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row["id_paczki"] . "</td>";
+                    echo "<td>" . $row["imie_nazwisko"] . "</td>";
+                    echo "<td>" . $row["nadawca"] . "</td>";
+                    echo "<td>" . $row["id_skrytki"] . "</td>";
+                    echo "<td>" . $row["data_nadania"] . "</td>";
+                    if($row["status"] == "NADANA"){
+                        echo "<td><span class='badge rounded-pill text-bg-light'>SENT</span></td>";
+                    }
+                    elseif($row["status"] == "W_PACZKOMACIE"){
+                        echo "<td><span class='badge rounded-pill text-bg-secondary'>IN LOCKER</span></td>";
+                    }
+                    elseif($row["status"] == "ODEBRANA"){
+                            echo "<td><span class='badge rounded-pill text-bg-success'>COLLECTED</span></td>";
+                    }
+                    echo
+                    '<td>
+<div class="row">
+            <div class="dropdown col-3">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            STATUS
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
+</div>
+        
+        </td>';
+                }
+            }
+
+            ?>
             </tbody>
         </table>
     </div>
