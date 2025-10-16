@@ -47,6 +47,13 @@ if (@$conn->connect_error) {
                 </div>
             ";
                 }
+                if($_SESSION['rola'] == 'ADMIN'){
+                    echo "
+                 <div class='text-end'>
+                <a class='btn btn-danger me-1' href='admin.php'>Admin panel</a>
+                </div>
+                ";
+                }
                 ?>
                 <div class="text-end">
                     <a class="btn btn-warning" href="logout.php">Log out</a>
@@ -54,6 +61,7 @@ if (@$conn->connect_error) {
             </div>
         </div>
     </header>
+    <main>
     </main>
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
