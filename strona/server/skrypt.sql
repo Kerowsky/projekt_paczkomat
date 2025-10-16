@@ -126,3 +126,11 @@ WHERE id_paczki = 2;
 UPDATE paczki
 SET paczki.status = 'W_PACZKOMACIE'
 WHERE id_paczki = 2;
+
+
+SELECT id_paczki, uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
+concat(uzytkownicy.imie,' ', uzytkownicy.nazwisko) AS 'imie_nazwisko',
+id_skrytki, status, nadawca, data_nadania, data_odebrania
+FROM paczki JOIN uzytkownicy
+                 ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
+order by id_uzytkownika asc;
