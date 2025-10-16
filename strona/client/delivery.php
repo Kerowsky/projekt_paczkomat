@@ -14,7 +14,7 @@ if (@$conn->connect_error) {
 
 ?>
 
-    <html lang="pl">
+    <html lang="pl" xmlns="http://www.w3.org/1999/html">
     <head>
         <title>Inteligentny paczkomat</title>
         <link rel="stylesheet" href="style/panel.css">
@@ -47,13 +47,6 @@ if (@$conn->connect_error) {
                 </div>
             ";
                 }
-                if($_SESSION['rola'] == 'ADMIN'){
-                    echo "
-                 <div class='text-end'>
-                <a class='btn btn-danger me-1' href='admin.php'>Admin panel</a>
-                </div>
-                ";
-                }
                 ?>
                 <div class="text-end">
                     <a class="btn btn-warning" href="logout.php">Log out</a>
@@ -62,6 +55,60 @@ if (@$conn->connect_error) {
         </div>
     </header>
     <main>
+        <div class="container">
+            <h1 class="text-center">LIST OF ORDERS</h1>
+                <table class="text-center table table-striped table-hover table-bordered">
+                    <thead class="table-yellowe">
+                        <tr>
+                            <th>NUMER PACZKI</th>
+                            <th>NUMER ZAMÓWIENIA</th>
+                            <th>NADAWCA</th>
+                            <th>ODBIORCA</th>
+                            <th>STATUS</th>
+                            <th>AKCJA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $conn = @new mysqli($servername, $username, $password, $dbname);
+                    if (@$conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+                    $sql = "
+                            SELECT 
+                                paczki.id_paczki,
+                                paczki.nr_zamowienia
+                                paczki.nadawca,
+                                CONCAT(uzytkownicy.imie, ' ', uzytkownicy.nazwisko) AS odbiorca,
+                                paczki.status
+                            FROM Paczki 
+                            JOIN uzytkownicy ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
+                            LEFT JOIN paczkomat ON paczki.id_skrytki = paczkomat.id_skrytki
+                            ";
+                    $result = @$conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                    <td>{$row['id_paczki']}</td>
+                    <td>{$row['nr_zamowienia']}</td>
+                    <td>{$row['nadawca']}</td>
+                    <td>{$row['odbiorca']}</td>
+                    <td>{$row['status']}</td>
+                    <td>
+                        <button class='btn btn-sm btn-primary'>Otwórz paczkoamt</button>
+                        <button class='btn btn-sm btn-danger'>Zmień status</button>
+                    </td>
+                  </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='5'>Brak paczek w bazie</td></tr>";
+                    }
+
+                    $conn->close();
+                    ?>
+                    </tbody>
+                </table>
+        </div>
     </main>
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
