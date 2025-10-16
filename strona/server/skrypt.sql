@@ -70,3 +70,7 @@ WHERE paczkomat.id_skrytki = 1;
 UPDATE paczki
 SET paczki.status = 'NADANA'
 WHERE id_paczki = 2;
+
+UPDATE paczki
+SET paczki.status = 'W_PACZKOMACIE'
+WHERE id_paczki = 2;

@@ -40,10 +40,17 @@ if (@$conn->connect_error) {
                 </li>
             </ul>
             <?php
-            if($_SESSION['rola'] == 'KURIER'){
+            if($_SESSION['rola'] == 'KURIER' || $_SESSION['rola'] == 'ADMIN'){
                 echo "
                  <div class='text-end'>
                 <a class='btn btn-warning me-1' href='delivery.php'>Delivery panel</a>
+                </div>
+            ";
+            }
+            if($_SESSION['rola'] == 'ADMIN'){
+                echo "
+                 <div class='text-end'>
+                <a class='btn btn-danger me-1' href='admin.php'>Admin panel</a>
                 </div>
             ";
             }
