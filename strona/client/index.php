@@ -9,7 +9,8 @@
 <?php
 include 'header.php';
 ?>
-<main class="d-flex justify-content-center align-items-center mx-auto h-100 row main-index">
+<div class="h-50 mb-5">s</div>
+<main class="w-75 d-flex justify-content-center align-items-center mx-auto h-100 row main-index">
     <div class="w-50 main-box align-items-center col-1 h-100">
         <h1 class="text-center">HEADER</h1>
         <p class="lead text-center">
