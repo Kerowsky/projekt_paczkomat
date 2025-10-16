@@ -9,20 +9,38 @@
 <?php
 include 'header.php';
 ?>
-<main class="d-flex justify-content-center align-items-center mx-auto h-100">
-    <div class="w-50 main-box align-items-center">
+<main class="d-flex justify-content-center align-items-center mx-auto h-100 row main-index">
+    <div class="w-50 main-box align-items-center col-1 h-100">
         <h1 class="text-center">HEADER</h1>
         <p class="lead text-center">
-            Meet <b>NextBox</b>, your intelligent parcel locker designed for a fast, secure, and contactless delivery experience.
-            Send, receive, and manage your packages anytime, anywhere - with just a few taps.
-            Innovative. Reliable. Smart.
+            At  <b>NextBox</b>, we believe that smart technology should make everyday life simpler.
+            Our mission is to revolutionize the way people send and receive parcels — by combining innovation, automation, and user-friendly design.
 
-            <b>NextBox</b> is not just a locker - its the next step in smart delivery.
+            Born from a passion for modern logistics and intelligent systems,  <b>NextBox</b> offers a secure, efficient, and eco-friendly solution for parcel delivery and collection.
+            We focus on creating technology that connects people and simplifies processes — whether for individuals, couriers, or businesses.
+
+            <b>NextBox</b> isn’t just a locker.
+            It’s the next generation of smart delivery
         </p>
-        <p class="lead w-100 d-flex justify-content-center">
-            <a href="map.php" class="btn white bg-warning">
-                Find your NextBox
-            </a>
+    </div>
+    <div class="w-50 main-box align-items-center col-1 h-100">
+        <img src="img/1.png" class="w-100 shadow">
+        </p>
+    </div>
+    <div class="w-50 main-box align-items-center col-1 h-100">
+        <img src="img/2.png" class="w-100 shadow">
+        </p>
+    </div>
+    <div class="w-50 main-box align-items-center col-1 h-100">
+        <h1 class="text-center">HEADER</h1>
+        <p class="lead text-center">
+            At <b>NextBox</b>, every parcel follows a seamless logistics process designed for speed,
+            safety, and efficiency. Each shipment is registered and tracked in real time,
+            then automatically sorted at our logistics centers using smart algorithms.
+            Parcels are securely delivered to local lockers, protected by multi-level access systems.
+            Once delivered, customers receive instant notifications with pickup details and can collect
+            their parcels 24/7. With advanced automation and transparent tracking,
+            <b>NextBox</b> ensures a smooth and reliable delivery experience from start to finish.
         </p>
     </div>
 </main>
