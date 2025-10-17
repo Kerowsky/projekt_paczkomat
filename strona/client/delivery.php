@@ -85,6 +85,14 @@ if (@$conn->connect_error) {
                             FROM Paczki 
                             JOIN uzytkownicy ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
                             LEFT JOIN paczkomat ON paczki.id_skrytki = paczkomat.id_skrytki
+                            ORDER BY 
+                                CASE
+                                    WHEN paczki.status='W_PACZKOMACIE' then 1
+                                    ELSE 0
+                                END,
+                                paczki.id_paczki ASC;
+                                    
+                                    
                             ";
                     $result = @$conn->query($sql);
                     if ($result->num_rows > 0) {
@@ -100,11 +108,15 @@ if (@$conn->connect_error) {
                             } else {
                                 echo "<td>ON THE WAY</td>";
                             }
-
-                            echo "<td>
-                                <button class='btn btn-success'>Open</button>
-                                <button class='btn btn-danger'>Change Status</button>
-                            </td>";
+                            echo "<td>";
+                            if ($row["status"] == "NADANA") {
+                                echo "<button class='btn btn-success'>Open</button>";
+                                echo "<button class='btn btn-primary'>Change Status</button>";
+                            }
+                            else{
+                                echo "<button class='btn btn-danger'>Support</button>";
+                            }
+                            echo "</td>";
                             echo "</tr>";
                         }
                     } else {
