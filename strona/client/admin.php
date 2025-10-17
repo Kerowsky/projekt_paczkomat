@@ -75,52 +75,8 @@ if (@$conn->connect_error) {
                 <th scope="col">ACTIONS</th>
             </tr>
             </thead>
-            <tbody>
-            <?php
-            $sql = "SELECT id_paczki, uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
-concat(uzytkownicy.imie,' ', uzytkownicy.nazwisko) AS 'imie_nazwisko',
-id_skrytki, status, nadawca, data_nadania, data_odebrania
-FROM paczki JOIN uzytkownicy
-ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
-order by id_uzytkownika asc";
-            $result = @$conn->query($sql);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["id_paczki"] . "</td>";
-                    echo "<td>" . $row["imie_nazwisko"] . "</td>";
-                    echo "<td>" . $row["nadawca"] . "</td>";
-                    echo "<td>" . $row["id_skrytki"] . "</td>";
-                    echo "<td>" . $row["data_nadania"] . "</td>";
-                    if($row["status"] == "NADANA"){
-                        echo "<td><span class='badge rounded-pill text-bg-light'>SENT</span></td>";
-                    }
-                    elseif($row["status"] == "W_PACZKOMACIE"){
-                        echo "<td><span class='badge rounded-pill text-bg-secondary'>IN LOCKER</span></td>";
-                    }
-                    elseif($row["status"] == "ODEBRANA"){
-                            echo "<td><span class='badge rounded-pill text-bg-success'>COLLECTED</span></td>";
-                    }
-                    echo
-                    '<td>
-<div class="row">
-            <div class="dropdown col-3">
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            STATUS
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-    </div>
-</div>
-        
-        </td>';
-                }
-            }
-
-            ?>
+            <tbody id="paczkiTable">
+            <?php include "admintable.php"; ?>
             </tbody>
         </table>
     </div>
@@ -130,6 +86,7 @@ order by id_uzytkownika asc";
         crossorigin="anonymous"></script>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="scripts/adminpanel.js" defer></script>
 </html>
 
 
