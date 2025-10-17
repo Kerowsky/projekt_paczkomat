@@ -58,7 +58,7 @@ if (@$conn->connect_error) {
     <main>
         <div class="container">
             <h1 class="text-center">LIST OF ORDERS</h1>
-                <table class="text-center table table-striped table-hover table-bordered table-dark">
+                <table class="text-center table table-striped table-hover table-bordered table-dark"> //utworzenie tabeli dla kuriera
                     <thead class="thead-warrnig text-dark">
                         <tr>
                             <th>PACKAGE NUMBER</th>
@@ -71,7 +71,7 @@ if (@$conn->connect_error) {
                     </thead>
                     <tbody>
                     <?php
-                    $conn = @new mysqli($servername, $username, $password, $dbname);
+                    $conn = @new mysqli($servername, $username, $password, $dbname); //połączenie tabeli z baza danych
                     if (@$conn->connect_error) {
                         die("Connection failed: " . $conn->connect_error);
                     }
@@ -89,25 +89,26 @@ if (@$conn->connect_error) {
                     $result = @$conn->query($sql);
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
-                            if($row['status'] == 'W_PACZKOMACIE'){
-                                $status_text='LOCKER';
-                            }else{
-                                $status_text='ON THE WAY';
+                            echo "<tr>";
+                            echo "<td>{$row['id_paczki']}</td>";
+                            echo "<td>{$row['nr_zamowienia']}</td>";
+                            echo "<td>{$row['nadawca']}</td>";
+                            echo "<td>{$row['odbiorca']}</td>";
+
+                            if ($row["status"] == "W_PACZKOMACIE") {
+                                echo "<td>IN LOCKER</td>";
+                            } else {
+                                echo "<td>ON THE WAY</td>";
                             }
-                            echo "<tr>
-                                        <td>{$row['id_paczki']}</td>
-                                        <td>{$row['nr_zamowienia']}</td>
-                                        <td>{$row['nadawca']}</td>
-                                        <td>{$row['odbiorca']}</td>
-                                        <td>{$row['status']}</td>
-                                        <td>
-                                            <button class='btn btn-success'>Open</button>
-                                            <button class='btn btn-danger'>Change Status</button>
-                                        </td>
-                                  </tr>";
+
+                            echo "<td>
+                                <button class='btn btn-success'>Open</button>
+                                <button class='btn btn-danger'>Change Status</button>
+                            </td>";
+                            echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5'>Brak paczek w bazie</td></tr>";
+                        echo "<tr><td colspan='5'>No packages in database</td></tr>";
                     }
 
                     $conn->close();
