@@ -9,7 +9,7 @@
 <?php
 include 'header.php';
 ?>
-<main class="d-flex justify-content-center align-items-center mx-auto h-100">
+<main class="d-flex justify-content-center align-items-center mx-auto h-100"  style="margin-top: 100px;">
     <div class="w-50 main-box align-items-center">
         <h1 class="text-center">Contact Information</h1>
         <div class="text-center">
