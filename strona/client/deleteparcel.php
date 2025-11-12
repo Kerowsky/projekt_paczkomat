@@ -6,7 +6,7 @@ if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "DELETE FROM paczki WHERE id_paczki = ".$_POST["id"];
+$sql = "DELETE FROM Paczki WHERE id_paczki = ".$_POST["id"];
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
 }

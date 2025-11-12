@@ -77,20 +77,20 @@ if (@$conn->connect_error) {
                     }
                     $sql = "
                             SELECT 
-                                paczki.id_paczki,
-                                paczki.nr_zamowienia,
-                                paczki.nadawca,
-                                CONCAT(uzytkownicy.imie, ' ', uzytkownicy.nazwisko) AS odbiorca,
-                                paczki.status
+                                Paczki.id_paczki,
+                                Paczki.nr_zamowienia,
+                                Paczki.nadawca,
+                                CONCAT(Uzytkownicy.imie, ' ', Uzytkownicy.nazwisko) AS Odbiorca,
+                                Paczki.status
                             FROM Paczki 
-                            JOIN uzytkownicy ON paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
-                            LEFT JOIN paczkomat ON paczki.id_skrytki = paczkomat.id_skrytki
+                            JOIN Uzytkownicy ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
+                            LEFT JOIN Paczkomat ON Paczki.id_skrytki = Paczkomat.id_skrytki
                             ORDER BY 
                                 CASE
-                                    WHEN paczki.status='W_PACZKOMACIE' then 1
+                                    WHEN Paczki.status='W_PACZKOMACIE' then 1
                                     ELSE 0
                                 END,
-                                paczki.id_paczki ASC;
+                                Paczki.id_paczki ASC;
                                     
                                     
                             ";

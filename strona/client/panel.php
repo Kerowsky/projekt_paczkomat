@@ -68,7 +68,7 @@ if (@$conn->connect_error) {
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
         <?php
 
-        $sql = "select * from paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
+        $sql = "select * from Paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
         $result = @$conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
