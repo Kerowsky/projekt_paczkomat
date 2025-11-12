@@ -85,7 +85,7 @@ if (@$conn->connect_error) {
                 <li class='fw-bold'>Time left:</li>
                 <li>-- hours</li>
             </ul>
-            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='fetch(`http://192.168.162.93:25565/open`)'>Collect</button>
+            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='ws.send(`on`)'>Collect</button>
         </div>
         </div>
     </div>
@@ -102,6 +102,8 @@ if (@$conn->connect_error) {
 
 
     </div>
+    <button onclick="ws.send('on')">LED ON</button>
+    <button onclick="ws.send('off')">LED OFF</button>
 </main>
 <script>
     function startTime() {
@@ -119,6 +121,12 @@ if (@$conn->connect_error) {
         if (i < 10) {i = "0" + i};
         return i;
     }
+
+    var ws = new WebSocket("ws://192.168.110.93:25565/");  // adres ESP32 !!!
+
+    ws.onmessage = function(event) {
+        console.log("ESP32:", event.data);
+    };
 </script>
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
