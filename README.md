@@ -11,3 +11,10 @@
 - [Bootstrap 5](https://getbootstrap.com/) - frontend toolkit  
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - client-side scripting language
 - [C](https://en.wikipedia.org/wiki/C_(programming_language)) - low-level programming language for arduino 
+
+
+
+Building the project:
+- open up terminal
+- switch directory to ./strona/
+- run: docker compose up --build -d
