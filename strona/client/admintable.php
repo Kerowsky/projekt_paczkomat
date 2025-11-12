@@ -7,11 +7,11 @@ if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id_paczki, uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
-concat(uzytkownicy.imie,' ', uzytkownicy.nazwisko) AS 'imie_nazwisko',
+$sql = "SELECT id_paczki, Uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
+concat(Uzytkownicy.imie,' ', Uzytkownicy.nazwisko) AS 'imie_nazwisko',
 id_skrytki, status, nadawca, data_nadania, data_odebrania
-FROM Paczki JOIN uzytkownicy
-ON Paczki.id_uzytkownika = uzytkownicy.id_uzytkownika
+FROM Paczki JOIN Uzytkownicy
+ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
 order by id_uzytkownika asc";
 
 $result = @$conn->query($sql);
