@@ -110,32 +110,32 @@ VALUES (5839201746,3, 3, 'W_PACZKOMACIE', 'CCC', NOW(), NULL),
        (2356489701,7, NULL, 'NADANA', 'Komputronik', '2025-10-15 14:45:00', NULL);
 
 
-##          ZAPYTANIA DO PANELÓW      ##
-UPDATE Uzytkownicy
-SET Uzytkownicy.rola = 'KLIENT'
-WHERE Uzytkownicy.id_uzytkownika = 2;
+-- ##          ZAPYTANIA DO PANELÓW      ##
+-- UPDATE Uzytkownicy
+-- SET Uzytkownicy.rola = 'KLIENT'
+-- WHERE Uzytkownicy.id_uzytkownika = 2;
 
-## WSTAWIANIE PACZKI (Opcje kuriera)
-
-SELECT Paczkomat.id_skrytki, Paczkomat.status
-FROM Paczkomat;
-
-UPDATE Paczkomat
-SET Paczkomat.status = 'WOLNA'
-WHERE Paczkomat.id_skrytki = 1;
-
-UPDATE Paczki
-SET Paczki.status = 'NADANA'
-WHERE id_paczki = 2;
-
-UPDATE Paczki
-SET Paczki.status = 'W_PACZKOMACIE'
-WHERE id_paczki = 2;
-
-
-SELECT id_paczki, Uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
-    concat(Uzytkownicy.imie,' ', Uzytkownicy.nazwisko) AS 'imie_nazwisko',
-    id_skrytki, status, nadawca, data_nadania, data_odebrania
-FROM Paczki JOIN Uzytkownicy
-                 ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
-order by id_uzytkownika asc;
+-- ## WSTAWIANIE PACZKI (Opcje kuriera)
+--
+-- SELECT Paczkomat.id_skrytki, Paczkomat.status
+-- FROM Paczkomat;
+--
+-- UPDATE Paczkomat
+-- SET Paczkomat.status = 'WOLNA'
+-- WHERE Paczkomat.id_skrytki = 1;
+--
+-- UPDATE Paczki
+-- SET Paczki.status = 'NADANA'
+-- WHERE id_paczki = 2;
+--
+-- UPDATE Paczki
+-- SET Paczki.status = 'W_PACZKOMACIE'
+-- WHERE id_paczki = 2;
+--
+--
+-- SELECT id_paczki, Uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
+--     concat(Uzytkownicy.imie,' ', Uzytkownicy.nazwisko) AS 'imie_nazwisko',
+--     id_skrytki, status, nadawca, data_nadania, data_odebrania
+-- FROM Paczki JOIN Uzytkownicy
+--                  ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
+-- order by id_uzytkownika asc;
