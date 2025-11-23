@@ -85,9 +85,9 @@ if (@$conn->connect_error) {
                 <li class='fw-bold'>Time left:</li>
                 <li>-- hours</li>
             </ul>
-            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='ws.send(`on`)'>Collect</button>
+            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='fetch(\"".$ipArduino."\")'>Collect</button>
         </div>
-        </div>
+        </div> 
     </div>
 
     ";
@@ -102,7 +102,7 @@ if (@$conn->connect_error) {
 
 
     </div>
-    <button onclick="ws.send('on')">LED ON</button>
+    <button onclick="fetch(`http://10.130.247.93:25565/on`)">LED ON</button>
     <button onclick="ws.send('off')">LED OFF</button>
 </main>
 <script>
@@ -122,7 +122,7 @@ if (@$conn->connect_error) {
         return i;
     }
 
-    var ws = new WebSocket("ws://192.168.110.93:25565/");  // adres ESP32 !!!
+    var ws = new WebSocket("ws://10.130.247.93:25565/");  // adres ESP32 !!!
 
     ws.onmessage = function(event) {
         console.log("ESP32:", event.data);
