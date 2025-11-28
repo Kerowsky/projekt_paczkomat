@@ -7,5 +7,5 @@ void setup() {
 }
 
 void loop() {
-
+  //Wgrany freeRTOS i to musi być puste
 }
