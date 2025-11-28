@@ -1,0 +1,1 @@
+//Wyprowadzimy diode led która będzie informowała nas o błedach
