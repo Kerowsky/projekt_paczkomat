@@ -102,8 +102,6 @@ if (@$conn->connect_error) {
 
 
     </div>
-    <button onclick="fetch(`http://10.130.247.93:25565/on`)">LED ON</button>
-    <button onclick="ws.send('off')">LED OFF</button>
 </main>
 <script>
     function startTime() {
