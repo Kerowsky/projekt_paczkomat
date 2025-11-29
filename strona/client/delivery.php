@@ -101,7 +101,7 @@ if (@$conn->connect_error) {
                             echo "<td>{$row['id_paczki']}</td>";
                             echo "<td>{$row['nr_zamowienia']}</td>";
                             echo "<td>{$row['nadawca']}</td>";
-                            echo "<td>{$row['odbiorca']}</td>";
+                            echo "<td>{$row['Odbiorca']}</td>";
 
                             if ($row["status"] == "W_PACZKOMACIE") {
                                 echo "<td>IN LOCKER</td>";
