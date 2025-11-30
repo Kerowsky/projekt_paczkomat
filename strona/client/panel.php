@@ -12,47 +12,58 @@ if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Obsługa AJAX
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    
+    if ($_POST['action'] === 'confirm_yes') {
+        $package_id = intval($_POST['package_id']);
+        $locker_id = intval($_POST['locker_id']);
+        
+        $stmt = $conn->prepare("UPDATE Paczki SET status = 'ODEBRANA' WHERE id_paczki = ?");
+        $stmt->bind_param("i", $package_id);
+        $stmt->execute();
+        
+        if ($locker_id) {
+            $stmt2 = $conn->prepare("UPDATE Paczkomat SET status = 'WOLNA' WHERE id_skrytki = ?");
+            $stmt2->bind_param("i", $locker_id);
+            $stmt2->execute();
+        }
+        
+        echo json_encode(['success' => true]);
+        exit;
+    }
+    
+    if ($_POST['action'] === 'confirm_no') {
+        echo json_encode(['success' => true]);
+        exit;
+    }
+}
 ?>
 
 <html lang="pl">
 <head>
-    <title>Inteligentny paczkomat</title>
+    <meta charset="UTF-8">
+    <title>NextBox - Inteligentny paczkomat</title>
     <link rel="stylesheet" href="style/panel.css">
-    <title>NextBox</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-dark" onload="startTime()">
+<body class="bg-dark">
 <header class="p-3 mb-3 text-bg-dark">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-evenly mb-md-0">
-                <li>
-                    <a href="index.php" class="nav-link px-2 text-secondary">Home</a>
-                </li>
-                <li>
-                    <a href="aboutus.php" class="nav-link px-2 text-white">About us</a>
-                </li>
-                <li>
-                    <a href="map.php" class="nav-link px-2 text-white">Find your NextBox</a>
-                </li>
-                <li>
-                    <a href="contact.php" class="nav-link px-2 text-white">Contact</a>
-                </li>
+                <li><a href="index.php" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="aboutus.php" class="nav-link px-2 text-white">About us</a></li>
+                <li><a href="map.php" class="nav-link px-2 text-white">Find your NextBox</a></li>
+                <li><a href="contact.php" class="nav-link px-2 text-white">Contact</a></li>
             </ul>
             <?php
             if($_SESSION['rola'] == 'KURIER' || $_SESSION['rola'] == 'ADMIN'){
-                echo "
-                 <div class='text-end'>
-                <a class='btn btn-warning me-1' href='delivery.php'>Delivery panel</a>
-                </div>
-            ";
+                echo "<div class='text-end'><a class='btn btn-warning me-1' href='delivery.php'>Delivery panel</a></div>";
             }
             if($_SESSION['rola'] == 'ADMIN'){
-                echo "
-                 <div class='text-end'>
-                <a class='btn btn-danger me-1' href='admin.php'>Admin panel</a>
-                </div>
-            ";
+                echo "<div class='text-end'><a class='btn btn-danger me-1' href='admin.php'>Admin panel</a></div>";
             }
             ?>
             <div class="text-end">
@@ -63,75 +74,186 @@ if (@$conn->connect_error) {
 </header>
 
 <h1 class="text-center text-white">Good morning <?php echo $_SESSION['imie'];?> ! ☕</h1>
+
 <main class="d-flex justify-content-center align-items-center mx-auto">
-<div class="row w-50 main-box align-items-center">
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-        <?php
-
-        $sql = "select * from Paczki where id_uzytkownika = '$_SESSION[id_uzytkownika]' ";
-        $result = @$conn->query($sql);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
+    <div class="row w-50 main-box align-items-center">
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            <?php
+            $sql = "SELECT * FROM Paczki WHERE id_uzytkownika = '$_SESSION[id_uzytkownika]' AND status != 'ODEBRANA'";
+            $result = @$conn->query($sql);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $locker_id = $row['id_skrytki'] ?? 0;
+                    echo "
+                    <div class='col'>
+                        <div class='card mb-4 rounded-3 shadow-sm bg-dark text-white'>
+                            <h3>Locker: " . ($locker_id ?: 'N/A') . "</h3>
+                            <div class='card-header py-3 bg-warning text-black'>
+                                <h4 class='my-0 fw-normal'>" . $row['status'] . "</h4>
+                            </div>
+                            <div class='card-body'>
+                                <ul class='list-unstyled mb-4'>
+                                    <li class='fw-bold'>Shipper:</li>
+                                    <li>" . $row['nadawca'] . "</li>
+                                    <li class='fw-bold'>Time left:</li>
+                                    <li>-- hours</li>
+                                </ul>
+                                <button type='button'
+                                        class='w-100 btn btn-lg btn-outline-warning' 
+                                        onclick='collectPackage(" . $row['id_paczki'] . ", " . $locker_id . ")'>
+                                    Collect
+                                </button>
+                            </div>
+                        </div>
+                    </div>";
+                }
+            } else {
                 echo "
-    <div class='col'>
-        <div class='card mb-4 rounded-3 shadow-sm bg-dark text-white'>
-            <h3>Locker: " . $row['id_skrytki'] . "</h3>
-            <div class='card-header py-3 bg-warning text-black'>
-                <h4 class='my-0 fw-normal'>" . $row['status'] . "</h4>
-            </div> <div class='card-body'>
-            <ul class='list-unstyled  mb-4'>
-                <li class='fw-bold'>Shipper:</li>
-                <li>" . $row['nadawca'] . "</li>
-                <li class='fw-bold'>Time left:</li>
-                <li>-- hours</li>
-            </ul>
-            <button type='button' class='w-100 btn btn-lg btn-outline-warning' onclick='fetch(\"".$ipArduino."\")'>Collect</button>
+                    <div class='empty-state d-flex flex-column justify-content-center align-items-center text-center text-white vh-100 w-100'>
+                        <img src='img/rejected.png'
+                            alt='empty' 
+                            width='140' 
+                            class='mb-4 opacity-75'>
+
+                    <h1 class='fw-bold mb-3'>No parcels waiting for you</h1>
+
+                    <p class='text-secondary mb-4' style='max-width: 400px'>
+                        Once a package is delivered to your locker, it will appear here automatically.
+                    </p>
+
+                    <a href='map.php' class='btn btn-warning btn-lg px-4'>
+                         Find your nearest NextBox
+                    </a>
+     </div>
+";
+                   }
+            ?>
         </div>
-        </div> 
-    </div>
-
-    ";
-            }
-
-        } else {
-            echo "Nie masz paczek na koncie";
-        }
-
-
-        ?>
-
-
     </div>
 </main>
+
+<!-- MODAL POTWIERDZENIA -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-body text-center text-white p-4">
+                <h4 class="mb-4">Did you collect your parcel?</h4>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
+                    <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
+                </div>
+                <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SUKCESU -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-success">
+            <div class="modal-body text-center text-white p-4">
+                <h3 class="mt-3">Thank you!</h3>
+                <p>Your parcel has been collected.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PONOWNEGO OTWARCIA -->
+<div class="modal fade" id="unsuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-danger">
+            <div class="modal-body text-center text-white p-4">
+                <h3 class="mt-3">Box will open again</h3>
+                <p>Please collect your parcel.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function startTime() {
-        const today = new Date();
-        let h = today.getHours();
-        let m = today.getMinutes();
-        let s = today.getSeconds();
-        m = checkTime(m);
-        s = checkTime(s);
-        document.getElementById('zegar').innerHTML =  h + ":" + m + ":" + s;
-        setTimeout(startTime, 1000);
+    //zmienne globalne 
+    let currentPackageId = null;
+    let currentLockerId = null;
+    //pobranie adresu ip z php               
+    const ipArduino = "<?php echo $ipArduino ?? ''; ?>";
+
+    //funkcja otwierania i pokazania modal'u potwierdzenia
+    function collectPackage(packageId, lockerId) {
+        currentPackageId = packageId; //nadpisanie zmiennych globalnych
+        currentLockerId = lockerId;
+        
+        //otwieranie skrytki 
+        if (ipArduino) {
+            fetch(ipArduino).catch(() => {});
+        }
+        
+        // pokazanie modalu potwierdzenia
+        new bootstrap.Modal(document.getElementById('confirmModal')).show();
     }
 
-    function checkTime(i) {
-        if (i < 10) {i = "0" + i};
-        return i;
+    //funkcja jesli uzytkownik nacisnął yes
+    function confirmYes() {
+        //Dane do wysłania
+        const formData = new FormData();
+        formData.append('action', 'confirm_yes');
+        formData.append('package_id', currentPackageId);
+        formData.append('locker_id', currentLockerId);
+        
+        //wysłanie requesta Ajax  do php
+        fetch('panel.php', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide(); //zamknięcie modalu potwierdzenia
+                setTimeout(() => {
+                    new bootstrap.Modal(document.getElementById('successModal')).show(); //pokazanie modalu sukcesu
+                    setTimeout(() => location.reload(), 2000); //przeładowanie storny po 2s
+                }, 300);
+            }
+        });
     }
+    //funkcja gdy użytkownik kliknie NO
+    function confirmNo() {
+        //ponownie otwarcie sktryki
+        if (ipArduino) {
+            fetch(ipArduino).catch(() => {});
+        }
+        //przygotowanie danych
+        const formData = new FormData();
+        formData.append('action', 'confirm_no');
+        
+        //wysłanie requesta Ajax
+        fetch('panel.php', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide(); //zamknięcie modalu potwierdzenia
+                setTimeout(() => {
+                    new bootstrap.Modal(document.getElementById('unsuccessModal')).show(); //pokazanie modalu niepowodzenia
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('unsuccessModal')).hide(); //ukrycie go po 10 sekundach
+                    }, 1000);
+                }, 300);
+            }
+        });
 
-    var ws = new WebSocket("ws://10.130.247.93:25565/");  // adres ESP32 !!!
-
-    ws.onmessage = function(event) {
-        console.log("ESP32:", event.data);
-    };
+        //zakładamy ze użytkownik odebrał juz paczke i zmieniamy jej status na odebrana i usuwamy z bazy po 1min
+        setTimeout(() => {
+            //dane do wysłania
+            const formData = new FormData();
+            formData.append('action', 'confirm_yes');
+            formData.append('package_id', currentPackageId);
+            formData.append('locker_id', currentLockerId);
+            //wysłanie request do ajax 
+            fetch('panel.php', { method: 'POST', body: formData })
+            .then(() => location.reload());
+        }, 60000); // 60 sekund = 1 minuta
+    }
 </script>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
 </html>
 
-
-<?php $conn->close()?>
+<?php $conn->close(); ?>
