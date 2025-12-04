@@ -6,10 +6,39 @@ if (!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany'] !== true) {
     exit;
 }
 
+$locker_id = $_SESSION['locker_id'] ?? 1; 
+
 require_once "config.php";
 $conn = @new mysqli($servername, $username, $password, $dbname);
 if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    
+    if ($_POST['action'] === 'confirm_yes') {
+        $package_id = intval($_POST['package_id']);
+        $locker_id = intval($_POST['locker_id']);
+    
+                $sql = "UPDATE Paczki SET status = 'W_PACZKOMACIE', id_skrytki = ? WHERE id_paczki = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $locker_id, $package_id);
+    
+        if ($stmt->execute()) {
+             echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $conn->error]);
+        }
+         $stmt->close();
+    exit;
+}
+    
+    if ($_POST['action'] === 'confirm_no') {
+        echo json_encode(['success' => true]);
+        exit;
+    }
 }
 
 ?>
@@ -58,7 +87,7 @@ if (@$conn->connect_error) {
     <main>
         <div class="container">
             <h1 class="text-center">LIST OF ORDERS</h1>
-                <table class="text-center table table-striped table-hover table-bordered table-dark"> //utworzenie tabeli dla kuriera
+                <table class="text-center table table-striped table-hover table-bordered table-dark"> 
                     <thead class="thead-warrnig text-dark">
                         <tr>
                             <th>PACKAGE NUMBER</th>
@@ -110,29 +139,89 @@ if (@$conn->connect_error) {
                             }
                             echo "<td>";
                             if ($row["status"] == "NADANA") {
-                                echo "<button class='btn btn-success'>Open</button>";
-                                echo "<button class='btn btn-primary'>Change Status</button>";
-                            }
+                                echo   "<button type='button' class='btn btn-warning px-4' 
+                                        onclick='collectPackage(" . $row['id_paczki'] . ", {$locker_id})'>Open</button>";
+                                    }
                             else{
-                                echo "<button class='btn btn-danger'>Support</button>";
+                                echo "<button class='btn btn-danger px-3' onclick='showSupport()'>Support</button>";
                             }
                             echo "</td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5'>No packages in database</td></tr>";
+                        echo "<tr><td colspan='6'>No packages in database</td></tr>";
                     }
 
-                    $conn->close();
+                    
                     ?>
                     </tbody>
                 </table>
         </div>
     </main>
+
+<!-- MODAL POTWIERDZENIA Dostarczenia -->
+<div class="modal fade" id="confirmDeliveryModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-body text-center text-white p-4">
+                <h4 class="mb-4">Did you put the parcel into the box?</h4>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
+                    <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
+                </div>
+                <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SUKCESU dostarczenia -->
+<div class="modal fade" id="deliveryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-success">
+            <div class="modal-body text-center text-white p-4">
+                <h3 class="mt-3">Thank you!</h3>
+                <p>Move to the next order!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PONOWNEGO OTWARCIA by dostarczyc -->
+<div class="modal fade" id="noDeliveryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-danger">
+            <div class="modal-body text-center text-white p-4">
+                <h3 class="mt-3">Box will open again</h3>
+                <p>Please put the order into the box this time!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SUPPORTU - Wizytówka kontaktowa -->
+<div class="modal fade" id="supportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-warning">
+            <div class="modal-body text-center text-white p-4">
+                <h1 class="mt-3">Need Help?</h1>
+                <h5>Contact our support team:</h5>
+                <p>Hotline: <a href="tel:+48787329887">+48 787 329 887</a></p>
+                <p>Support: <a href="tel:+48393441282">+48 393 441 282</a></p>
+                <p>Support: <a href="mailto:rc311594@student.polsl.pl">rc311594@student.polsl.pl</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="scripts/delivery.js"></script>    
+    <script>
+        initPanel("<?php echo $ipArduino ?? ''; ?>");
+    </script>
     </body>
     </html>
 
