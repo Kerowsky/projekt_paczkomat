@@ -20,7 +20,7 @@ if (@$conn->connect_error) {
     <title>NextBox</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body class="bg-dark" onload="startTime()">
+<body class="bg-dark">
 <header class="p-3 mb-3 text-bg-dark">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -81,12 +81,106 @@ if (@$conn->connect_error) {
         </table>
     </div>
 </main>
+
+<!-- MODAL wynikowy usunięcia -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-danger">
+            <div class="modal-body text-center text-white p-4">
+                <img src="img/rejected.png" alt="empty" width="140" class="mb-4 opacity-75">
+                <h3 class="mt-3">Order deleted!</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL wynikowy zmiany statusu -->
+<div class="modal fade" id="ChangeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-success">
+            <div class="modal-body text-center text-white p-4">
+                <img src="img/ChangeStatus.png" alt="empty" width="140" class="mb-4 opacity-75">
+                <h3 class="mt-3">Order status is changed!</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL informacyjny zwrotu do nadawcy -->
+<div class="modal fade" id="returnModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-info">
+            <div class="modal-body text-center text-white p-4">
+                <img src="img/delivery-truck.png" alt="empty" width="140" class="mb-4 opacity-75">
+                <h3 class="mt-3">Parcel will return to sender</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-</body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="scripts/adminpanel.js" defer></script>
+<script>
+function reloadTable() {
+    fetch("admintable.php")
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("paczkiTable").innerHTML = html;
+        })
+        .catch(error => console.error("Błąd przy odświeżaniu tabeli:", error));
+}
+
+function deleteParcel(packageId) {
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', packageId);
+
+    fetch('admintable.php', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                new bootstrap.Modal(document.getElementById('deleteModal')).show();
+                setTimeout(() => location.reload(), 1500);
+            }
+        })
+        .catch(error => console.error("Błąd:", error));
+}
+
+function changeStatus(packageId, packageStatus) {
+    let newStatus;
+
+    if (packageStatus === 'W_PACZKOMACIE') {
+        newStatus = 'NADANA';
+    } else if (packageStatus === 'NADANA') {
+        newStatus = 'W_PACZKOMACIE';
+    } else {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'change_status');
+    formData.append('id', packageId);
+    formData.append('status', newStatus);
+
+    fetch('admintable.php', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                new bootstrap.Modal(document.getElementById('ChangeModal')).show();
+                setTimeout(() => location.reload(), 1500);
+            }
+        })
+        .catch(error => console.error("Błąd:", error));
+}
+
+function showReturnModal() {
+    new bootstrap.Modal(document.getElementById('returnModal')).show();
+}
+</script>
+</body>
+
 </html>
 
 
