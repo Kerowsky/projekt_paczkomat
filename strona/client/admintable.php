@@ -1,12 +1,52 @@
 <?php
-
-
 require_once "config.php";
 $conn = @new mysqli($servername, $username, $password, $dbname);
 if (@$conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// ============ OBSŁUGA AJAX REQUESTÓW ============
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+    
+    $action = $_POST['action'] ?? '';
+    $id = $_POST['id'] ?? '';
+
+    if (!$id) {
+        die(json_encode(['success' => false]));
+    }
+
+    switch($action) {
+        case 'delete':
+            $sql = "DELETE FROM Paczki WHERE id_paczki = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $id);
+            $result = $stmt->execute();
+            echo json_encode(['success' => $result]);
+            $stmt->close();
+            break;
+            
+        case 'change_status':
+            $status = $_POST['status'] ?? '';
+            
+            if (empty($status)) {
+                die(json_encode(['success' => false]));
+            }
+            
+            $sql = "UPDATE Paczki SET status = ? WHERE id_paczki = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $status, $id);
+            $result = $stmt->execute();
+            echo json_encode(['success' => $result]);
+            $stmt->close();
+            break;
+    }
+    
+    $conn->close();
+    exit;
+}
+
+// ============ POBIERANIE DANYCH DO TABELI ============
 $sql = "SELECT id_paczki, Uzytkownicy.id_uzytkownika AS 'id_uzytkownika',
 concat(Uzytkownicy.imie,' ', Uzytkownicy.nazwisko) AS 'imie_nazwisko',
 id_skrytki, status, nadawca, data_nadania, data_odebrania
@@ -35,20 +75,21 @@ if ($result->num_rows > 0) {
         echo
             '<td>
 <div class="row">
-            <div class="dropdown col-3">
+    <div class="dropdown col-3">
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             STATUS
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" onclick="deleteParcel('.$row["id_paczki"].')">Delete</a></li>
-            <li><a class="dropdown-item" href="#">Change status</a></li>
-            <li><a class="dropdown-item" href="#">cos nowego</a></li>
+            <li><a class="dropdown-item" href="#" onclick="deleteParcel('.$row["id_paczki"].'); return false;">Delete</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeStatus('.$row["id_paczki"].', \''.$row["status"].'\'); return false;">Change status</a></li>
+            <li><a class="dropdown-item" href="#" onclick="showReturnModal(); return false;">Return to sender</a></li>
         </ul>
     </div>
 </div>
-        
-        </td>';
+        </td>
+        </tr>';
     }
 }
 
+$conn->close();
 ?>
