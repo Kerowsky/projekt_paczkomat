@@ -3,7 +3,7 @@
 #include <WiFiS3.h>
 #include <ArduinoMDNS.h>
 
-#define simulateTempRead = 1
+#define simulateTempRead 1
 
 char ssid[] = ssidWifi;
 char pass[] = passWifi;
@@ -18,6 +18,8 @@ const char* deviceName = "arduino";
 TaskHandle_t serverHTTPHandle;
 TaskHandle_t blinkTaskHandle;
 TaskHandle_t tempReadHandle;
+QueueHandle_t tempQueue;
+
 void taskServer(void *pvParameters);
 
 void setup() {
@@ -53,8 +55,9 @@ int attempts = 0;
   }
 
   //elementy od freeRTOS
+  tempQueue = xQueueCreate(1, sizeof(float));
   // xTaskCreate(taskBlink, "BlinkTest",256,nullptr,2,&blinkTaskHandle);
-  // xTaskCreate(tempRead, "TempRead", 256, nullptr,2,&tempReadHandle);
+  xTaskCreate(tempRead, "TempRead", 256, nullptr,2,&tempReadHandle);
   xTaskCreate(taskServer, "serverHTTP", 1024, nullptr, 1, &serverHTTPHandle);
   Serial.println("Uruchamianie freeRTOS");
   vTaskStartScheduler();
@@ -66,6 +69,7 @@ void loop() {
 
 
 void taskServer(void *pvParameters) {
+  float currentTemp;
   for (;;) {
     WiFiClient client = server.available();
     mdns.run();
@@ -97,9 +101,12 @@ if (client) {
                 Serial.println("duza szafka otworzona");
               }
               else if (request.indexOf("GET /tempRead") >= 0) {
-                client.write("temp");
+                if (xQueuePeek(tempQueue, &currentTemp, 0) == pdPASS) {
+                  Serial.println(currentTemp);
+                }
+                client.println(currentTemp);
               }
-              break; // Wyjście z while(client.connected())
+              break; 
             } else {
               currentLine = "";
             }
