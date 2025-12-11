@@ -18,8 +18,8 @@
                 <h2 class="text-center">Open:</h2>
                 <div class="pt-2 d-flex justify-content-evenly">
                     <button href="#" class="btn btn-primary" onclick="showModal()">Small locker</button>
-                    <button href="#" class="btn btn-primary">Medium locker</button>
-                    <button href="#" class="btn btn-primary">Large locker</button>
+                    <button href="#" class="btn btn-primary" onclick="showModal()">Medium locker</button>
+                    <button href="#" class="btn btn-primary" onclick="showModal()">Large locker</button>
                 </div>
             </div>
             <div class="col">
@@ -39,14 +39,9 @@
 
 <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark">
+        <div class="modal-content bg-primary">
             <div class="modal-body text-center text-white p-4">
-                <h4 class="mb-4">Did you collect your parcel?</h4>
-                <div class="d-flex justify-content-center gap-3">
-                    <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
-                    <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
-                </div>
-                <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
+                <h4 class="text-center">Opening box...</h4>
             </div>
         </div>
     </div>

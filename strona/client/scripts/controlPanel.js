@@ -42,14 +42,14 @@ const myChart = new Chart(ctx, {
     }
 });
 
-function showModal() {
-    // pokazanie modalu potwierdzenia
-    new bootstrap.Modal(document.getElementById('infoModal')).show();
-}
 
-function confirmYes() {
-    setTimeout(() => {
-        new bootstrap.Modal(document.getElementById('infoModal')).show();
-        setTimeout(() => location.reload(), 2000);
-    }, 300)
+function showModal() {
+    const modalID = document.getElementById('infoModal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalID);
+    modal.show();
+    modalID.addEventListener('shown.bs.modal', function (){
+        setTimeout(function (){
+           modal.hide();
+        }, 1000);
+    })
 }
