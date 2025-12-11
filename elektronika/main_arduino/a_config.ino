@@ -6,6 +6,7 @@ const uint8_t sLockerPin = 3;
 const uint8_t mLockerPin = 4;
 const uint8_t bLockerPin = 5;
 const uint8_t errorIndicatorPin = LED_BUILTIN; // na razie led builtin
+const uint8_t tempPin = A0;
 
 //Kolejka do komunikacji main -> lockerControler
 QueueHandle_t lockerQueue = nullptr;
