@@ -2,7 +2,6 @@
 #include "pass.h"
 #include <WiFiS3.h>
 #include <ArduinoMDNS.h>
-#include <PID_v1.h>
 
 char ssid[] = ssidWifi;
 char pass[] = passWifi;
@@ -10,14 +9,16 @@ char pass[] = passWifi;
 int port = serverPort;
 WiFiServer server(port);
 
+MDNS mdns(udp);
+const char* deviceName = "arduino";
 
 
-TaskHandle_t blinkTaskHandle  = nullptr;
-TaskHandle_t tempReadHandle = nullptr;
+const TaskHandle_t blinkTaskHandle  = nullptr;
+const TaskHandle_t tempReadHandle = nullptr;
 void setup() {
+  Serial.begin(115200);
   xTaskCreate(taskBlink, "BlinkTest",256,nullptr,1,&blinkTaskHandle);
   xTaskCreate(tempRead, "TempRead", 256, nullptr,2,&tempReadHandle);
-  Serial.begin(9600);
   vTaskStartScheduler();
 }
 
