@@ -46,11 +46,41 @@ function openLocker(lockerNumber) {
     //Obsluga modali od szafki
     const modalID = document.getElementById('infoModal');
     const modal = bootstrap.Modal.getOrCreateInstance(modalID);
-    modal.show();
-    modalID.addEventListener('shown.bs.modal', function () {
-        setTimeout(function () {
-            modal.hide();
-        }, 1000);
-    })
+    //Szafka
+    const lockerID = lockerNumber;
+    switch (lockerNumber) {
+        case 1:
+            axios.get("http://arduino.local:25565/openLockerSmall")
+                .then(function (response){
+                    modal.show();
+                });
+            modalID.addEventListener('shown.bs.modal', function () {
+                setTimeout(function () {
+                    modal.hide();
+                }, 1000);
+            })
+            break;
+        case 2:
+            axios.get("http://arduino.local:25565/openLockerMedium")
+                .then(function (response){
+                    modal.show();
+                });
+            modalID.addEventListener('shown.bs.modal', function () {
+                setTimeout(function () {
+                    modal.hide();
+                }, 1000);
+            })
+            break;
+        case 3:
+            axios.get("http://arduino.local:25565/openLockerLarge")
+                .then(function (response){
+                    modal.show();
+                });
+            modalID.addEventListener('shown.bs.modal', function () {
+                setTimeout(function () {
+                    modal.hide();
+                }, 1000);
+            })
 
+    }
 }
