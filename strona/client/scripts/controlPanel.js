@@ -42,14 +42,15 @@ const myChart = new Chart(ctx, {
     }
 });
 
-
-function showModal() {
+function openLocker(lockerNumber) {
+    //Obsluga modali od szafki
     const modalID = document.getElementById('infoModal');
     const modal = bootstrap.Modal.getOrCreateInstance(modalID);
     modal.show();
-    modalID.addEventListener('shown.bs.modal', function (){
-        setTimeout(function (){
-           modal.hide();
+    modalID.addEventListener('shown.bs.modal', function () {
+        setTimeout(function () {
+            modal.hide();
         }, 1000);
     })
+
 }

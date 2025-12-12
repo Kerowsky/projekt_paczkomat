@@ -96,9 +96,11 @@ if (client) {
               }
               else if (request.indexOf("GET /openLockerMedium") >= 0) {
                 Serial.println("srednia szafka otworzona");
+                digitalWrite(LED_BUILTIN, HIGH);
               }
               else if (request.indexOf("GET /openLockerLarge") >= 0) {
                 Serial.println("duza szafka otworzona");
+                digitalWrite(LED_BUILTIN, LOW);
               }
               else if (request.indexOf("GET /tempRead") >= 0) {
                 if (xQueuePeek(tempQueue, &currentTemp, 0) == pdPASS) {

@@ -17,9 +17,9 @@
             <div class="col">
                 <h2 class="text-center">Open:</h2>
                 <div class="pt-2 d-flex justify-content-evenly">
-                    <button href="#" class="btn btn-primary" onclick="showModal()">Small locker</button>
-                    <button href="#" class="btn btn-primary" onclick="showModal()">Medium locker</button>
-                    <button href="#" class="btn btn-primary" onclick="showModal()">Large locker</button>
+                    <button href="#" class="btn btn-primary" onclick="openLocker(1)">Small locker</button>
+                    <button href="#" class="btn btn-primary" onclick="openLocker(2)">Medium locker</button>
+                    <button href="#" class="btn btn-primary" onclick="openLocker(3)">Large locker</button>
                 </div>
             </div>
             <div class="col">
