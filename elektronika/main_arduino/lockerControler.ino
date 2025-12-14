@@ -5,10 +5,6 @@ void openLocker(void *pvParameters) {
 
   for (;;) {
     if (xQueueReceive(lockerQueue, &receivedPin, portMAX_DELAY) == pdPASS) {
-      
-      Serial.print("Otrzymano zadanie otwarcia pin: ");
-      Serial.println(receivedPin);
-
       switch (receivedPin) {
         case 1:
           Serial.println("-> Otwieram mala szafke (Pin 3)");
