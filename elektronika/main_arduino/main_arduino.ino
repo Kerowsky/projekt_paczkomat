@@ -22,14 +22,15 @@ const char* deviceName = "arduino";
 TaskHandle_t serverHTTPHandle;
 TaskHandle_t blinkTaskHandle;
 TaskHandle_t tempReadHandle;
-TaskHandle_t showTimeHandle;
+TaskHandle_t lcdControlHandle;
+TaskHandle_t lockerControlHandle;
 QueueHandle_t tempQueue;
 QueueHandle_t lockerQueue;
 QueueHandle_t lcdQueue;
 
-const uint8_t sLockerPin = 3;
-const uint8_t mLockerPin = 4;
-const uint8_t bLockerPin = 5;
+const uint8_t sLockerPin = 2;
+const uint8_t mLockerPin = 3;
+const uint8_t bLockerPin = 4;
 
 int8_t lockerNumber;
 
@@ -40,7 +41,9 @@ void setup() {
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0,0);
-  lcd.print("NEXTBOX"); 
+  lcd.print("    NEXTBOX    "); 
+  lcd.setCursor(0,1);
+  lcd.print("    Starting... ");
 
   //Ustawienia pinów
   pinMode(LED_BUILTIN, OUTPUT);
@@ -82,12 +85,13 @@ int attempts = 0;
 
   //elementy od freeRTOS
   tempQueue = xQueueCreate(1, sizeof(float));
-  lockerQueue = xQueueCreate(1, sizeof(int8_t));
+  lockerQueue = xQueueCreate(1, sizeof(uint8_t));
+  lcdQueue = xQueueCreate(1, sizeof(uint8_t));
   // xTaskCreate(taskBlink, "BlinkTest",256,nullptr,2,&blinkTaskHandle);
   xTaskCreate(tempRead, "TempRead", 128, nullptr,2,&tempReadHandle);
   xTaskCreate(taskServer, "serverHTTP", 1024, nullptr, 1, &serverHTTPHandle);
-  xTaskCreate(openLocker, "OpenLocker", 128, nullptr, 3, &showTimeHandle);
-  xTaskCreate(showTime, "ShowTime", 128, nullptr, 3, &showTimeHandle);
+  xTaskCreate(openLocker, "OpenLocker", 128, nullptr, 3, &lockerControlHandle);
+  xTaskCreate(lcdControl, "LcdControl", 128, nullptr, 3, &lcdControlHandle);
   Serial.println("Uruchamianie freeRTOS");
   vTaskStartScheduler();
 }
