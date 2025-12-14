@@ -2,8 +2,12 @@
 #include "pass.h"
 #include <WiFiS3.h>
 #include <ArduinoMDNS.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h> 
 
 #define simulateTempRead 1
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); //Uruchom wyswietlacz na I2C pod adresem 0x27
 
 char ssid[] = ssidWifi;
 char pass[] = passWifi;
@@ -18,16 +22,35 @@ const char* deviceName = "arduino";
 TaskHandle_t serverHTTPHandle;
 TaskHandle_t blinkTaskHandle;
 TaskHandle_t tempReadHandle;
+TaskHandle_t showTimeHandle;
 QueueHandle_t tempQueue;
+
+const uint8_t sLockerPin = 3;
+const uint8_t mLockerPin = 4;
+const uint8_t bLockerPin = 5;
 
 void taskServer(void *pvParameters);
 
 void setup() {
+  //Inicjalizacja wyświetlacza:
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("NEXTBOX"); 
+
+  //Ustawienia pinów
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(sLockerPin, OUTPUT);
+  pinMode(mLockerPin, OUTPUT);
+  pinMode(bLockerPin, OUTPUT);
+
+  //Uruchom serial
   Serial.begin(115200);
   //Sekcja komunikacji z wifi
   Serial.print("Lacze z ");
   Serial.print(ssid);
+
+  //Wystartuj wifi
   WiFi.begin(ssid,pass);
 int attempts = 0;
   while (WiFi.status() != WL_CONNECTED || WiFi.localIP() == IPAddress(0,0,0,0)) {
@@ -35,7 +58,6 @@ int attempts = 0;
     Serial.print(".");
     attempts++;
     
-    // Jeśli nie połączy przez 20 sekund (40 * 500ms), zresetuj WiFi.begin
     if (attempts > 40) {
        Serial.println("\nZbyt długo! Ponawiam WiFi.begin...");
        WiFi.begin(ssid, pass);
@@ -59,6 +81,7 @@ int attempts = 0;
   // xTaskCreate(taskBlink, "BlinkTest",256,nullptr,2,&blinkTaskHandle);
   xTaskCreate(tempRead, "TempRead", 256, nullptr,2,&tempReadHandle);
   xTaskCreate(taskServer, "serverHTTP", 1024, nullptr, 1, &serverHTTPHandle);
+  xTaskCreate(showTime, "ShowTime", 256, nullptr, 3, &showTimeHandle);
   Serial.println("Uruchamianie freeRTOS");
   vTaskStartScheduler();
 }
@@ -93,14 +116,21 @@ if (client) {
               
               if (request.indexOf("GET /openLockerSmall") >= 0) {
                 Serial.println("mala szafka otworzona");
+                digitalWrite(sLockerPin, HIGH);
+                vTaskDelay(100);
+                digitalWrite(sLockerPin, LOW);
               }
               else if (request.indexOf("GET /openLockerMedium") >= 0) {
                 Serial.println("srednia szafka otworzona");
-                digitalWrite(LED_BUILTIN, HIGH);
+                digitalWrite(mLockerPin, HIGH);
+                vTaskDelay(100);
+                digitalWrite(mLockerPin, LOW);
               }
               else if (request.indexOf("GET /openLockerLarge") >= 0) {
                 Serial.println("duza szafka otworzona");
-                digitalWrite(LED_BUILTIN, LOW);
+                digitalWrite(bLockerPin, HIGH);
+                vTaskDelay(100);
+                digitalWrite(bLockerPin, LOW);
               }
               else if (request.indexOf("GET /tempRead") >= 0) {
                 if (xQueuePeek(tempQueue, &currentTemp, 0) == pdPASS) {
