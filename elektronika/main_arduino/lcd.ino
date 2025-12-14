@@ -25,7 +25,7 @@ void lcdControl(void *pvParameters) {
             break;
 
       }
-      vTaskDelay(10000 / portTICK_PERIOD_MS);
+      vTaskDelay(6000 / portTICK_PERIOD_MS);
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("    NEXTBOX    "); 
