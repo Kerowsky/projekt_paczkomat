@@ -97,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     <li>" . $row['nadawca'] . "</li>
                                     <li class='fw-bold'>Time left:</li>
                                     <li>-- hours</li>
+                                    <li class='fw-bold'>Pick Up code:</li>
+                                    <li>" . $row['kod_odbioru'] . "</li>
                                 </ul>
                                 <button type='button'
                                         class='w-100 btn btn-lg btn-outline-warning' 
