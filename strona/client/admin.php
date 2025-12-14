@@ -49,7 +49,8 @@ if (@$conn->connect_error) {
             if($_SESSION['rola'] == 'ADMIN'){
                 echo "
                 <div class='text-end'>
-                    <a class='btn btn-danger me-1' href='admin.php'>Admin panel</a>
+                    <a class='btn btn-danger me-0' href='admin.php'>Admin panel</a>
+                    <a class='btn btn-success me-1' href='addParcel.php'>Add parcel</a> 
                 </div>
                 ";
                 }
