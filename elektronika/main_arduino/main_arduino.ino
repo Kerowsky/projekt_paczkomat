@@ -24,10 +24,14 @@ TaskHandle_t blinkTaskHandle;
 TaskHandle_t tempReadHandle;
 TaskHandle_t showTimeHandle;
 QueueHandle_t tempQueue;
+QueueHandle_t lockerQueue;
+QueueHandle_t lcdQueue;
 
 const uint8_t sLockerPin = 3;
 const uint8_t mLockerPin = 4;
 const uint8_t bLockerPin = 5;
+
+int8_t lockerNumber;
 
 void taskServer(void *pvParameters);
 
@@ -45,7 +49,7 @@ void setup() {
   pinMode(bLockerPin, OUTPUT);
 
   //Uruchom serial
-  Serial.begin(115200);
+  Serial.begin(9600);
   //Sekcja komunikacji z wifi
   Serial.print("Lacze z ");
   Serial.print(ssid);
@@ -78,10 +82,12 @@ int attempts = 0;
 
   //elementy od freeRTOS
   tempQueue = xQueueCreate(1, sizeof(float));
+  lockerQueue = xQueueCreate(1, sizeof(int8_t));
   // xTaskCreate(taskBlink, "BlinkTest",256,nullptr,2,&blinkTaskHandle);
-  xTaskCreate(tempRead, "TempRead", 256, nullptr,2,&tempReadHandle);
+  xTaskCreate(tempRead, "TempRead", 128, nullptr,2,&tempReadHandle);
   xTaskCreate(taskServer, "serverHTTP", 1024, nullptr, 1, &serverHTTPHandle);
-  xTaskCreate(showTime, "ShowTime", 256, nullptr, 3, &showTimeHandle);
+  xTaskCreate(openLocker, "OpenLocker", 128, nullptr, 3, &showTimeHandle);
+  xTaskCreate(showTime, "ShowTime", 128, nullptr, 3, &showTimeHandle);
   Serial.println("Uruchamianie freeRTOS");
   vTaskStartScheduler();
 }
@@ -115,22 +121,20 @@ if (client) {
               client.println();
               
               if (request.indexOf("GET /openLockerSmall") >= 0) {
-                Serial.println("mala szafka otworzona");
-                digitalWrite(sLockerPin, HIGH);
-                vTaskDelay(100);
-                digitalWrite(sLockerPin, LOW);
+                lockerNumber = 1;
+                xQueueOverwrite(lockerQueue, &lockerNumber);
+                vTaskDelay(20);
+                  
               }
               else if (request.indexOf("GET /openLockerMedium") >= 0) {
-                Serial.println("srednia szafka otworzona");
-                digitalWrite(mLockerPin, HIGH);
-                vTaskDelay(100);
-                digitalWrite(mLockerPin, LOW);
+                lockerNumber = 2;
+                xQueueOverwrite(lockerQueue, &lockerNumber);
+                vTaskDelay(1);
               }
               else if (request.indexOf("GET /openLockerLarge") >= 0) {
-                Serial.println("duza szafka otworzona");
-                digitalWrite(bLockerPin, HIGH);
-                vTaskDelay(100);
-                digitalWrite(bLockerPin, LOW);
+                lockerNumber = 3;
+                xQueueOverwrite(lockerQueue, &lockerNumber);
+                vTaskDelay(1);
               }
               else if (request.indexOf("GET /tempRead") >= 0) {
                 if (xQueuePeek(tempQueue, &currentTemp, 0) == pdPASS) {
