@@ -12,3 +12,26 @@
     background-color: #343a40;
 }
 
+.dataTables_wrapper .pagination .page-link {
+     background-color: #343a40; /* Ciemny, jak table-dark */
+     border-color: #454d55;     /* Kolor obramowania */
+     color: #fff;               /* Kolor tekstu */
+ }
+
+.dataTables_wrapper .pagination .page-link:hover {
+    background-color: #495057; /* Nieco jaśniejszy szary */
+    border-color: #454d55;
+    color: #fff;
+}
+
+.dataTables_wrapper .pagination .page-item.active .page-link {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.dataTables_wrapper .pagination .page-item.disabled .page-link {
+    background-color: #212529; /* Bardzo ciemny */
+    border-color: #343a40;
+    color: #6c757d;            /* Szary, wyblakły tekst */
+}

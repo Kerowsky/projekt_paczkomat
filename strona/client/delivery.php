@@ -42,13 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 ?>
-
     <html lang="pl" xmlns="http://www.w3.org/1999/html">
     <head>
         <title>Inteligentny paczkomat</title>
         <link rel="stylesheet" href="style/panel.css">
         <title>NextBox</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/2.3.6/js/dataTables.js"></script>
         <link rel="stylesheet" href="delivery.css">
     </head>
     <body class="bg-dark" onload="startTime()">
@@ -87,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <main>
         <div class="container">
             <h1 class="text-center">LIST OF ORDERS</h1>
-                <table class="text-center table table-striped table-hover table-bordered table-dark"> 
+                <table class="text-center table table-striped table-hover table-bordered table-dark text-white" id="tabelaZamowien">
                     <thead class="thead-warrnig text-dark">
                         <tr>
                             <th>PACKAGE NUMBER</th>
@@ -114,12 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             FROM Paczki 
                             JOIN Uzytkownicy ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
                             LEFT JOIN Paczkomat ON Paczki.id_skrytki = Paczkomat.id_skrytki
-                            ORDER BY 
-                                CASE
-                                    WHEN Paczki.status='W_PACZKOMACIE' then 1
-                                    ELSE 0
-                                END,
-                                Paczki.id_paczki ASC;
                                     
                                     
                             ";
@@ -148,8 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             echo "</td>";
                             echo "</tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='6'>No packages in database</td></tr>";
                     }
 
                     
@@ -159,70 +153,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </div>
     </main>
 
-<!-- MODAL POTWIERDZENIA Dostarczenia -->
-<div class="modal fade" id="confirmDeliveryModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark">
-            <div class="modal-body text-center text-white p-4">
-                <h4 class="mb-4">Did you put the parcel into the box?</h4>
-                <div class="d-flex justify-content-center gap-3">
-                    <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
-                    <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
+    <!-- MODAL POTWIERDZENIA Dostarczenia -->
+    <div class="modal fade" id="confirmDeliveryModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark">
+                <div class="modal-body text-center text-white p-4">
+                    <h4 class="mb-4">Did you put the parcel into the box?</h4>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
+                        <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
+                    </div>
+                    <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
                 </div>
-                <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL SUKCESU dostarczenia -->
-<div class="modal fade" id="deliveryModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-success">
-            <div class="modal-body text-center text-white p-4">
-                <h3 class="mt-3">Thank you!</h3>
-                <p>Move to the next order!</p>
+    <!-- MODAL SUKCESU dostarczenia -->
+    <div class="modal fade" id="deliveryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-success">
+                <div class="modal-body text-center text-white p-4">
+                    <h3 class="mt-3">Thank you!</h3>
+                    <p>Move to the next order!</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL PONOWNEGO OTWARCIA by dostarczyc -->
-<div class="modal fade" id="noDeliveryModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-danger">
-            <div class="modal-body text-center text-white p-4">
-                <h3 class="mt-3">Box will open again</h3>
-                <p>Please put the order into the box this time!</p>
+    <!-- MODAL PONOWNEGO OTWARCIA by dostarczyc -->
+    <div class="modal fade" id="noDeliveryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-danger">
+                <div class="modal-body text-center text-white p-4">
+                    <h3 class="mt-3">Box will open again</h3>
+                    <p>Please put the order into the box this time!</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL SUPPORTU - Wizytówka kontaktowa -->
-<div class="modal fade" id="supportModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-warning">
-            <div class="modal-body text-center text-white p-4">
-                <h1 class="mt-3">Need Help?</h1>
-                <h5>Contact our support team:</h5>
-                <p>Hotline: <a href="tel:+48787329887">+48 787 329 887</a></p>
-                <p>Support: <a href="tel:+48393441282">+48 393 441 282</a></p>
-                <p>Support: <a href="mailto:rc311594@student.polsl.pl">rc311594@student.polsl.pl</a></p>
+    <!-- MODAL SUPPORTU - Wizytówka kontaktowa -->
+    <div class="modal fade" id="supportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-warning">
+                <div class="modal-body text-center text-white p-4">
+                    <h1 class="mt-3">Need Help?</h1>
+                    <h5>Contact our support team:</h5>
+                    <p>Hotline: <a href="tel:+48787329887">+48 787 329 887</a></p>
+                    <p>Support: <a href="tel:+48393441282">+48 393 441 282</a></p>
+                    <p>Support: <a href="mailto:rc311594@student.polsl.pl">rc311594@student.polsl.pl</a></p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
     <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="scripts/delivery.js"></script>    
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="scripts/delivery.js"></script>
     <script>
         initPanel("<?php echo $ipArduino ?? ''; ?>");
     </script>
     </body>
+    <script>
+        $(document).ready(function() {
+            $('#tabelaZamowien').DataTable({
+                // Opcjonalnie: Ustawienie sortowania domyślnego
+                // Kolumna 4 (Status) malejąco, potem Kolumna 0 (ID) rosnąco
+                // To symuluje Twój stary SQL ORDER BY
+                order: [[4, 'asc'], [0, 'asc']],
+
+                // Wyłączenie sortowania dla kolumny z przyciskami (ACTION)
+                columnDefs: [
+                    { orderable: false, targets: 5 }
+                ],
+
+                // Tłumaczenie na angielski jest domyślne, ale jeśli chcesz zmienić teksty:
+                language: {
+                    search: "Search:",
+                    lengthMenu: "Number of _MENU_ packages",
+                    info: "_START_ out of _END_ from _TOTAL_ packages",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Next",
+                        previous: "Previous"
+                    }
+                }
+            });
+        });
+    </script>
     </html>
 
 
