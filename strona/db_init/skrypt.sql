@@ -1,3 +1,4 @@
+SET NAMES 'utf8mb4';
 CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'user';
 GRANT ALL PRIVILEGES ON *.* TO 'user'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Paczkomat
     rozmiar    ENUM ('S','M','L') NOT NULL,
     status     ENUM ('WOLNA','ZAJETA') DEFAULT 'WOLNA',
     CHECK (id_skrytki IN (1, 2, 3))
-    );
+    )DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS Uzytkownicy
@@ -23,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Uzytkownicy
     imie           VARCHAR(255)                          NOT NULL,
     nazwisko       VARCHAR(255)                          NOT NULL,
     rola           ENUM ('ADMIN','KURIER','KLIENT') DEFAULT 'KLIENT'
-    );
+    )DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS Paczki
 (
@@ -39,7 +40,7 @@ CREATE TABLE IF NOT EXISTS Paczki
     FOREIGN KEY (id_uzytkownika) REFERENCES Uzytkownicy (id_uzytkownika),
     FOREIGN KEY (id_skrytki) REFERENCES Paczkomat (id_skrytki)
 
-    );
+    )DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS Archiwum
 (
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Archiwum
     FOREIGN KEY (id_uzytkownika) REFERENCES Uzytkownicy (id_uzytkownika),
     FOREIGN KEY (id_skrytki) REFERENCES Paczkomat (id_skrytki)
 
-    );
+    )DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ##              Przykładowi użytkownicy     ##
 INSERT INTO Uzytkownicy (login, haslo, imie, nazwisko, rola)
