@@ -46,12 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <head>
         <title>Inteligentny paczkomat</title>
         <link rel="stylesheet" href="style/panel.css">
+        <link rel="stylesheet" href="style/delivery.css">
         <title>NextBox</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/2.3.6/js/dataTables.js"></script>
-        <link rel="stylesheet" href="delivery.css">
     </head>
     <body class="bg-dark" onload="startTime()">
     <header class="p-3 mb-3 text-bg-dark">
@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
                 // Tłumaczenie na angielski jest domyślne, ale jeśli chcesz zmienić teksty:
                 language: {
-                    search: "Search:",
+                    search: "Search: ",
                     lengthMenu: "Number of _MENU_ packages",
                     info: "_START_ out of _END_ from _TOTAL_ packages",
                     paginate: {
