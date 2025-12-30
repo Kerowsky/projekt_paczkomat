@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <div class="container">
             <h1 class="text-center">LIST OF ORDERS</h1>
                 <table class="text-center table table-striped table-hover table-bordered table-dark text-white" id="tabelaZamowien">
-                    <thead class="thead-warrnig text-dark">
+                    <thead class="thead-warnig text-dark">
                         <tr>
                             <th>PACKAGE NUMBER</th>
                             <th>ORDER NUMBER</th>
@@ -219,10 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <script>
         $(document).ready(function() {
             $('#tabelaZamowien').DataTable({
-                // Opcjonalnie: Ustawienie sortowania domyślnego
-                // Kolumna 4 (Status) malejąco, potem Kolumna 0 (ID) rosnąco
-                // To symuluje Twój stary SQL ORDER BY
-                order: [[4, 'asc'], [0, 'asc']],
+                order: [[0, 'asc']],
 
                 // Wyłączenie sortowania dla kolumny z przyciskami (ACTION)
                 columnDefs: [

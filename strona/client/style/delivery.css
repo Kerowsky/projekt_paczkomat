@@ -15,3 +15,6 @@
 .dt-layout-row{
     color:white;
 }
+table-responsive{
+    overflow-x: hidden;
+}
