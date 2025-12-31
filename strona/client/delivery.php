@@ -79,6 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 </div>
             ";
                 }
+                if($_SESSION['rola'] == 'ADMIN'){
+                    echo "
+                 <div class='text-end'>
+                 <a class='btn btn-danger me-0' href='admin.php'>Admin panel</a>
+                <a class='btn btn-warning me-1' href='delivery.php'>Delivery panel</a>
+                </div>
+            ";
+                }
                 ?>
                 <div class="text-end">
                     <a class="btn btn-warning" href="logout.php">Log out</a>
@@ -87,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </div>
     </header>
     <main>
+        <h1 class="text-center text-light">DELIVERY PANEL</h1>
         <div class="container">
             <h1 class="text-center">LIST OF ORDERS</h1>
                 <table class="text-center table table-striped table-hover table-bordered table-dark text-white" id="tabelaZamowien">

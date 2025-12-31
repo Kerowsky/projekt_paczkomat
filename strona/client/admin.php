@@ -66,8 +66,8 @@ if (@$conn->connect_error) {
         </div>
     </div>
 </header>
-
 <main>
+    <h1 class="text-center text-light">ADMIN PANEL</h1>
     <div>
         <table class="text-center table table-striped table-hover table-bordered table-dark text-white" id="tabelaAdmina">
             <thead class="thead-warnig text-dark">

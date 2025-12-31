@@ -47,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <title>NextBox - Inteligentny paczkomat</title>
     <link rel="stylesheet" href="style/panel.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body class="bg-dark">
 <header class="p-3 mb-3 text-bg-dark">
@@ -77,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
 <main class="d-flex justify-content-center align-items-center mx-auto">
     <div class="row w-50 main-box align-items-center">
-        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center" id="grid">
             <?php
             $sql = "SELECT * FROM Paczki WHERE id_uzytkownika = '$_SESSION[id_uzytkownika]' AND status != 'ODEBRANA'";
             $result = @$conn->query($sql);
@@ -85,8 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 while ($row = $result->fetch_assoc()) {
                     $locker_id = $row['id_skrytki'] ?? 0;
                     echo "
-                    <div class='col'>
-                        <div class='card mb-4 rounded-3 shadow-sm bg-dark text-white'>
+                        <div class=' col-xs-4 col-sm-4 col-md-4 cell gridstrap-cell-hidden card rounded-3 shadow-sm bg-dark text-white '>
                             <h3>Locker: " . ($locker_id ?: 'N/A') . "</h3>
                             <div class='card-header py-3 bg-warning text-black'>
                                 <h4 class='my-0 fw-normal'>" . $row['status'] . "</h4>
@@ -106,8 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     Collect
                                 </button>
                             </div>
-                        </div>
-                    </div>";
+                        </div>";
                 }
             } else {
                 echo "
@@ -177,7 +177,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="scripts/panel.js"></script>
 <script>
-    initDeliveryPanel("<?php echo $ipArduino ?? ''; ?>");    
+    initDeliveryPanel("<?php echo $ipArduino ?? ''; ?>");
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('grid');
+        var sortable = Sortable.create(el, {
+            animation: 150,      // Czas animacji w ms
+            ghostClass: 'bg-light', // Klasa dodawana do "ducha" przeciąganego elementu
+            onEnd: function (evt) {
+                console.log('Zmieniono kolejność z ' + evt.oldIndex + ' na ' + evt.newIndex);
+                // Tutaj możesz zapisać nową kolejność w bazie danych/localStorage
+            }
+        });
+    });
 </script>
 </body>
 </html>
