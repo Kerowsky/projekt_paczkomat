@@ -124,9 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 Paczki.status
                             FROM Paczki 
                             JOIN Uzytkownicy ON Paczki.id_uzytkownika = Uzytkownicy.id_uzytkownika
-                            LEFT JOIN Paczkomat ON Paczki.id_skrytki = Paczkomat.id_skrytki
-                                    
-                                    
+                            LEFT JOIN Paczkomat ON Paczki.id_skrytki = Paczkomat.id_skrytki    
                             ";
                     $result = @$conn->query($sql);
                     if ($result->num_rows > 0) {
@@ -235,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     { orderable: false, targets: 5 }
                 ],
 
-                // Tłumaczenie na angielski jest domyślne, ale jeśli chcesz zmienić teksty:
                 language: {
                     search: "Search: ",
                     lengthMenu: "Number of _MENU_ packages",

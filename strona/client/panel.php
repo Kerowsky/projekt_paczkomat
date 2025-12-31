@@ -183,12 +183,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     document.addEventListener('DOMContentLoaded', function () {
         var el = document.getElementById('grid');
         var sortable = Sortable.create(el, {
-            animation: 150,      // Czas animacji w ms
-            ghostClass: 'bg-light', // Klasa dodawana do "ducha" przeciąganego elementu
-            onEnd: function (evt) {
-                console.log('Zmieniono kolejność z ' + evt.oldIndex + ' na ' + evt.newIndex);
-                // Tutaj możesz zapisać nową kolejność w bazie danych/localStorage
-            }
+            animation: 250,
+            easing: "cubic-bezier(0.65, 0, 0.35, 1)", // Płynniejszy, nowoczesny ruch
         });
     });
 </script>
