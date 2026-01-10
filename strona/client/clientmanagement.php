@@ -23,6 +23,7 @@ if (@$conn->connect_error) {
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/2.3.6/js/dataTables.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     </head>
     <body class="bg-dark">
     <header class="p-3 mb-3 text-bg-dark">
@@ -94,17 +95,16 @@ if (@$conn->connect_error) {
                 echo "<td>{$row['rola']}</td>";
                 echo
                     '<td>
-                        <div class="row">
-                            <div class="dropdown col-3">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    STATUS
+                        <div  class="d-flex gap-2 justify-content-center">
+                                <button class="btn btn-warning rounded-pill px-3" type="button">
+                                    <i class="bi bi-lock-fill" style="color: white;"></i>
                                 </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                    <li><a class="dropdown-item" href="#">Change status</a></li>
-                                    <li><a class="dropdown-item" href="#">Return to sender</a></li>
-                                </ul>
-                            </div>
+                                <button class="btn btn-danger rounded-pill px-3" type="button" >
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                                <button class="btn btn-danger rounded-pill px-3" type="button" >
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
                         </div>
                     </td>';
                 echo "</tr>";
