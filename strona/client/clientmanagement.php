@@ -99,7 +99,7 @@ if (@$conn->connect_error) {
                                 <button class="btn btn-warning rounded-pill px-3" type="button">
                                     <i class="bi bi-lock-fill" style="color: white;"></i>
                                 </button>
-                                <button class="btn btn-danger rounded-pill px-3" type="button" >
+                                <button class="btn btn-danger rounded-pill px-3" type="button">
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                                 <button class="btn btn-danger rounded-pill px-3" type="button" >
@@ -114,7 +114,24 @@ if (@$conn->connect_error) {
         </tbody>
     </table>
     </div>
+
+    <!-- MODAL USUWANIA UZYTKOWNIKA -->
+    <div class="modal fade" id="deleteModal" tabindex="1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark">
+                <div class="modal-body text-center text-white p-4">
+                    <h4 class="mb-4">Did you collect your parcel?</h4>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmYes()">YES</button>
+                        <button type="button" class="btn btn-danger btn-lg px-5" onclick="confirmNo()">NO</button>
+                    </div>
+                    <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">← BACK</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </body>
+    <script src="scripts/usermanagement.js"></script>
     <script>
         $(document).ready(function() {
             $('#tabelaUzytkownikow').DataTable({
