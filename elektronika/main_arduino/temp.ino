@@ -10,6 +10,8 @@ void tempRead(void *pvParameters){
           napiecie = odczyt * (5.0/1023.0);
 
           temperatura = napiecie * 100.0 - 10.0;
+          xQueueOverwrite(tempQueue, &temperatura);
+          xQueueOverwrite(tempQueue, &temperatura);
           vTaskDelay(pdMS_TO_TICKS(500));
           Serial.println(temperatura);
           break;
