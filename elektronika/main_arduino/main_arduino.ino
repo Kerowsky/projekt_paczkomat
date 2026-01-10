@@ -53,6 +53,7 @@ void setup() {
   pinMode(sLockerPin, OUTPUT);
   pinMode(mLockerPin, OUTPUT);
   pinMode(bLockerPin, OUTPUT);
+  pinMode(peltierPin, OUTPUT);
 
   //Uruchom serial
   Serial.begin(9600);

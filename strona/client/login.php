@@ -25,10 +25,6 @@ if ($result = @$conn->query($sql)) {
         $result->free();
         header("Location:panel.php");
     }
-    else {
-        echo "❌ Błędny login lub hasło.";
-        echo "<br><a href='index.php'>Spróbuj ponownie</a>";
-    }
 
 }
 ?>
@@ -37,3 +33,42 @@ if ($result = @$conn->query($sql)) {
 
 $conn->close();
 ?>
+
+<html>
+<head>
+    <title>NEXTBOX</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Definicja animacji */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px); /* Tekst lekko się uniesie */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tekst {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body onload="badLogin()" class="bg-dark">
+<div class="h-25"></div>
+<h1 class="tekst text-center text-white ">❌ Bad login or password, try again...</h1>
+<script>
+    function badLogin(){
+        setTimeout(() =>{
+            window.location.href = "loginpanel.php";
+        },2000)
+    }
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

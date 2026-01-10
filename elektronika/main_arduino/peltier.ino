@@ -5,9 +5,11 @@ float receivedTemp;
 void peltierControl (void *pvParameters){
   if (xQueueReceive(peltierQueue, &receivedTemp, portMAX_DELAY) == pdPASS) {
     if(receivedTemp < (setpoint - histereza)){
+      digitalWrite(peltierPin, LOW);
       //Wylacz peltiera
     }
     if(receivedTemp > (setpoint + histereza)){
+      digitalWrite(peltierPin, HIGH);
       //Wlacz peltiera
     }
 

@@ -20,7 +20,6 @@ if (session_status() == PHP_SESSION_NONE){
                     <a href="contact.php" class="nav-link px-2 text-white">Contact</a>
                 </li>
             </ul>
-            <div class="text-end">
                 <?php
                 if(!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany'] !== true) {
                     echo '<a class="btn btn-warning me-1" href="loginpanel.php">Log in</a>';
@@ -38,7 +37,6 @@ if (session_status() == PHP_SESSION_NONE){
                     }
                 }
                 ?>
-            </div>
         </div>
     </div>
 </header>
