@@ -1,0 +1,3 @@
+[submodule "aplikacja-kuriera"]
+	path = aplikacja-kuriera
+	url = https://github.com/Kerowsky/aplikacja-kuriera
