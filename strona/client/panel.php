@@ -80,6 +80,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 <main class="d-flex justify-content-center align-items-center mx-auto">
     <div class="row w-50 main-box align-items-center">
         <div class="row row-cols-1 row-cols-md-3 mb-3 text-center" id="grid">
+<div class=' col-xs-4 col-sm-4 col-md-4 cell gridstrap-cell-hidden card rounded-3 shadow-sm bg-dark text-white '>
+                            <h3>Locker: 1</h3>
+                            <div class='card-header py-3 bg-warning text-black'>
+                                <h4 class='my-0 fw-normal'>" In box "</h4>
+                            </div>
+                            <div class='card-body'>
+                                <ul class='list-unstyled mb-4'>
+                                    <li class='fw-bold'>Shipper:</li>
+                                    <li>"Allegro"</li>
+                                    <li class='fw-bold'>Time left:</li>
+                                    <li>5 hours</li>
+                                    <li class='fw-bold'>Pick Up code:</li>
+                                    <li>"123 432"</li>
+                                </ul>
+                                <button type='button'
+                                        class='w-100 btn btn-lg btn-outline-warning' 
+                                        onclick='openLocker(1)'>
+                                    Collect
+                                </button>
+                            </div>
+                        </div>
+            <div class=' col-xs-4 col-sm-4 col-md-4 cell gridstrap-cell-hidden card rounded-3 shadow-sm bg-dark text-white '>
+                            <h3>Locker: 2</h3>
+                            <div class='card-header py-3 bg-warning text-black'>
+                                <h4 class='my-0 fw-normal'>" In Box "</h4>
+                            </div>
+                            <div class='card-body'>
+                                <ul class='list-unstyled mb-4'>
+                                    <li class='fw-bold'>Shipper:</li>
+                                    <li>"Botland"</li>
+                                    <li class='fw-bold'>Time left:</li>
+                                    <li>7 hours</li>
+                                    <li class='fw-bold'>Pick Up code:</li>
+                                    <li>"123 123"</li>
+                                </ul>
+                                <button type='button'
+                                        class='w-100 btn btn-lg btn-outline-warning' 
+                                        onclick='collectPackage('openLocker(2)')>
+                                    Collect
+                                </button>
+                            </div>
+                        </div>
+            <div class=' col-xs-4 col-sm-4 col-md-4 cell gridstrap-cell-hidden card rounded-3 shadow-sm bg-dark text-white '>
+                            <h3>Locker: 3</h3>
+                            <div class='card-header py-3 bg-warning text-black'>
+                                <h4 class='my-0 fw-normal'>" In box "</h4>
+                            </div>
+                            <div class='card-body'>
+                                <ul class='list-unstyled mb-4'>
+                                    <li class='fw-bold'>Shipper:</li>
+                                    <li>"OLX"</li>
+                                    <li class='fw-bold'>Time left:</li>
+                                    <li>12 hours</li>
+                                    <li class='fw-bold'>Pick Up code:</li>
+                                    <li>"333 222"</li>
+                                </ul>
+                                <button type='button'
+                                        class='w-100 btn btn-lg btn-outline-warning' 
+                                        onclick='collectPackage('openLocker(3)')>
+                                    Collect
+                                </button>
+                            </div>
+                        </div>
             <?php
             $sql = "SELECT * FROM Paczki WHERE id_uzytkownika = '$_SESSION[id_uzytkownika]' AND status != 'ODEBRANA'";
             $result = @$conn->query($sql);
