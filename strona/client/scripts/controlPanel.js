@@ -50,7 +50,7 @@ function openLocker(lockerNumber) {
     const lockerID = lockerNumber;
     switch (lockerNumber) {
         case 1:
-            axios.get("http://arduino.local:25565/openLockerSmall")
+            axios.get("http://raspberry.local:25565/openLockerSmall")
                 .then(function (response){
                     modal.show();
                 });
@@ -61,7 +61,7 @@ function openLocker(lockerNumber) {
             })
             break;
         case 2:
-            axios.get("http://arduino.local:25565/openLockerMedium")
+            axios.get("http://raspberry.local:25565/openLockerMedium")
                 .then(function (response){
                     modal.show();
                 });
@@ -72,7 +72,7 @@ function openLocker(lockerNumber) {
             })
             break;
         case 3:
-            axios.get("http://arduino.local:25565/openLockerLarge")
+            axios.get("http://raspberry.local:25565/openLockerLarge")
                 .then(function (response){
                     modal.show();
                 });
